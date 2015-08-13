@@ -1,0 +1,5 @@
+Dff parser:
+    ☐ refactor to use flat (not tree) chunk loading system
+
+Aed parser:
+    ☐ start implementing

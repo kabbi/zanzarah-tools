@@ -1,0 +1,36 @@
+{
+  "name": "zanzarah-tools",
+  "version": "1.0.0",
+  "description": "A set of various zanzarah modelling tools",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "dissolve": "^0.3.3",
+    "bluebird": "^2.9.14",
+    "iconv": "^2.1.6",
+    "JSONStream": "^0.10.0",
+    "node-uuid": "^1.4.3",
+    "concentrate": "^0.2.3",
+    "lodash": "^3.8.0",
+    "sleep": "^2.0.0",
+    "rufus": "^0.5.7",
+    "yargs": "^3.5.4",
+    "node.three.js": "^0.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zanzarah",
+    "3D",
+    "OpenGL",
+    "editor",
+    "viewer",
+    "modelling"
+  ],
+  "author": "kabbi",
+  "license": "MIT"
+}

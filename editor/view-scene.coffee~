@@ -1,0 +1,87 @@
+THREE = require "node.three.js"
+yargs = require "yargs"
+fs = require "fs"
+
+ATB = THREE.document.AntTweakBar
+FirstPersonControls = require "./lib/FirstPersonControls"
+OrbitControls = require "./lib/OrbitControls"
+{loadSceneAsync} = require "./scene-loader"
+
+argv = yargs.demand(1).argv
+
+[width, height] = [800, 600]
+[windowHalfX, windowHalfY] = [width / 2, height / 2]
+[mouseX, mouseY] = [0, 0]
+
+sceneBar = null
+
+renderer = new THREE.WebGLRenderer
+	width: 800
+	height: 600
+renderer.setClearColor 0xffffff
+
+camera = new THREE.PerspectiveCamera 75, width/height, 0.1, 1000
+camera.far *= 1000
+camera.updateProjectionMatrix()
+camera.position.y = 100
+camera.position.z = 200
+
+scene = new THREE.Scene()
+
+controls = new OrbitControls camera, renderer.domElement, {width: width, height: height}
+
+sceneFileStream = fs.createReadStream argv._[0]
+sceneFileStream.on "error", ->
+	console.error "Error: Scene file not found"
+	process.exit 1
+loadSceneAsync(sceneFileStream).then (container) ->
+	controls.center = container.getObjectByName("sceneCenter").position
+	scene.add container
+
+initGui = ->
+	ATB.Init()
+	ATB.Define " GLOBAL help='Zanzarah scene file editor.' "
+	ATB.WindowSize width, height
+	vars =
+		z: 0
+		c: 0
+		b: true
+	sceneBar = new ATB.NewBar "Scene"
+	sceneBar.AddVar "sceneFile", ATB.TYPE_FLOAT,
+		getter: -> vars.z
+		setter: (x) -> vars.z = x
+	, " label='Scene file' min=-5 max=5 step=0.1 keyIncr=s keyDecr=S help='Eye distance' "
+	sceneBar.AddVar "stringTest", ATB.TYPE_CHAR,
+		getter: -> 42
+	, " label='Some string test' help='Char test' "
+	sceneBar.AddButton "commentTest", undefined,
+		"label='Some comment test' help='Char test'"
+	sceneBar.AddVar "displayTriggers", ATB.TYPE_BOOLCPP,
+		getter: -> vars.b
+		setter: (x) -> vars.b = x
+	, " label='Display triggers' help='Boolean test' "
+	sceneBar.AddSeparator()
+	sceneBar.AddButton "testButton", ->
+		vars.b = false
+	, " label='-[[Destroy mesh]]-' help='TestButton'"
+	ATB.Define " Scene buttonalign=right"
+initGui()
+
+prevTime = 0
+render = (currentTime) ->
+	THREE.requestAnimationFrame render
+	renderer.render scene, camera
+	ATB.Draw()
+
+	currentTime ?= 0
+	delta = currentTime - prevTime
+	prevTime = currentTime
+
+	controls.update delta / 10
+
+THREE.document.addEventListener 'mousemove', (event) ->
+	mouseX = ( event.pageX - windowHalfX ) * 10
+	mouseY = ( event.pageY - windowHalfY ) * 10
+, false
+
+render()
