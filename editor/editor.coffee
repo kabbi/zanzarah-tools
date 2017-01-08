@@ -58,11 +58,11 @@ module.exports = class Editor extends EventEmitter
 			require path.join __dirname, file
 
 	bootstrapWorld: ->
-		@addSystem "world.loader"
+		@addSystem "world.loaders.scene"
 
 	startEverything: ->
 		logger.info "Starting system loop"
-		
+
 	addSystem: (name, options) ->
 		logger.debug "adding system #{name}"
 		system = @requireSystem name

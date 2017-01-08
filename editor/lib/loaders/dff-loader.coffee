@@ -75,6 +75,8 @@ parseSkeleton = (geometry, data, frames) ->
 			rotq: rotq.toArray()
 
 calculateBoneParentship = (frames, skeleton) ->
+	return unless skeleton?.bones?
+
 	boneParents = {}
 	boneById = {}
 
@@ -99,7 +101,7 @@ calculateBoneParentship = (frames, skeleton) ->
 		bone.parent = if parent.boneId is -1 then -1 else parent.index
 		bone.frame = parent.frame
 
-parseMaterials = (materials, data, filePath) ->
+parseMaterials = (materials, data, filePath, skinned) ->
 	texturePath = utils.texturePathByModelPath filePath
 	textureFormat = ".BMP"
 	addressModes =
@@ -113,7 +115,7 @@ parseMaterials = (materials, data, filePath) ->
 		wrapS = THREE.RepeatWrapping # addressModes[material.texture.addrModeU]
 		wrapT = THREE.RepeatWrapping # addressModes[material.texture.addrModeV]
 		threeMaterial.vertexColors = THREE.VertexColors
-		threeMaterial.skinning = true
+		threeMaterial.skinning = skinned
 		if material.texture.colorFile.length
 			colorFile = "#{texturePath}/#{material.texture.colorFile.toUpperCase()}#{textureFormat}"
 			# console.log "Using texture #{colorFile}"
@@ -141,20 +143,22 @@ parseModel = (data, filePath) ->
 	modelMaterials = data.entries[4].materials
 	modelSkin = data.entries[5].skin
 
-	calculateBoneParentship modelFrames, modelSkin
+	if modelSkin
+		calculateBoneParentship modelFrames, modelSkin
+		parseSkeleton geometry, modelSkin, modelFrames
 
 	parseVertices geometry, modelGeometry
 	parseFaces geometry, modelGeometry
 	# parseColors geometry, modelGeometry
 	parseUVs geometry, modelGeometry
-	parseSkeleton geometry, modelSkin, modelFrames
-	parseMaterials materials, modelMaterials, filePath
+	parseMaterials materials, modelMaterials, filePath, !!modelSkin
 
 	geometry.dynamic = false
 	geometry.computeFaceNormals()
 	geometry.computeBoundingSphere()
 
-	new THREE.SkinnedMesh geometry, new THREE.MeshFaceMaterial materials
+	Mesh = if modelSkin then THREE.SkinnedMesh else THREE.Mesh
+	new Mesh geometry, new THREE.MeshFaceMaterial materials
 
 exports.loadModel = (filePath, callback) ->
 	file = fs.createReadStream filePath

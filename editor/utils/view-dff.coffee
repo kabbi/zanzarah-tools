@@ -45,20 +45,21 @@ scene.add frameContainer
 scene.add boneContainer
 
 loadModelAsync(argv._[0]).then (mesh) ->
+	console.log "#{argv._[0]}"
 	scale = 50 / mesh.geometry.boundingSphere.radius
 	controls.zoomIn scale
 	scene.add mesh
 	meshObject = mesh
 
-	skeletonHelper = new THREE.SkeletonHelper mesh
-	skeletonHelper.material.linewidth = 3
+	# skeletonHelper = new THREE.SkeletonHelper mesh
+	# skeletonHelper.material.linewidth = 3
 	# scene.add skeletonHelper
 
-	loadAnimationAsync("../../MODELS/ACTORSEX/G21ID2.SKA").then (animation) ->
-		meshAnimation = new THREE.Animation meshObject, animation
-		meshAnimation.play()
+	# loadAnimationAsync("../../MODELS/ACTORSEX/G21ID2.SKA").then (animation) ->
+	# 	meshAnimation = new THREE.Animation meshObject, animation
+	# 	meshAnimation.play()
 
-	for frame in mesh.geometry.frames or []
+	for frame in mesh.geometry?.frames or []
 		idx = mesh.geometry.frames.indexOf frame
 		color = 0xff0000
 		unless mesh.geometry.frames.animations[idx].someFlag
@@ -92,7 +93,7 @@ loadModelAsync(argv._[0]).then (mesh) ->
 			frameContainer.add cube
 		frame.cube = cube
 
-	for bone in mesh.skeleton.bones or []
+	for bone in mesh.skeleton?.bones or []
 		cubeGeometry = new THREE.SphereGeometry 0.03, 16, 16
 		cubeMaterial = new THREE.MeshBasicMaterial color: 0xffff00
 		cube = new THREE.Mesh cubeGeometry, cubeMaterial

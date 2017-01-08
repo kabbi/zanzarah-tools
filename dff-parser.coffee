@@ -125,20 +125,22 @@ class StreamParser extends Dissolve
 					.tap ->
 						@exactlyCounted "animations", @vars.data.frames.length, ->
 							@header() # One rwEXTENSION header
-							# And then exact extension data
-							.header()
-							.unparse "size", "type", "version"
-							.int32le "i1"
-							.uint32le "someFlag"
 							.tap ->
-								return unless @vars.someFlag
-								@uint32le "ii1"
-								.uint32le "count1"
-								.uint32le "count2"
+								return unless @vars.size
+								# And then exact extension data
+								@header()
+								.unparse "size", "type", "version"
+								.int32le "i1"
+								.uint32le "someFlag"
 								.tap ->
-									@exactlyCounted "items1", @vars.count1, @strangeAnimData
-									.exactlyCounted "items2", @vars.count2, @strangeAnimData
-									.unparse "count1", "count2"
+									return unless @vars.someFlag
+									@uint32le "ii1"
+									.uint32le "count1"
+									.uint32le "count2"
+									.tap ->
+										@exactlyCounted "items1", @vars.count1, @strangeAnimData
+										.exactlyCounted "items2", @vars.count2, @strangeAnimData
+										.unparse "count1", "count2"
 				when "rwGEOMETRYLIST"
 					@unparse "size"
 					.tap "data", ->

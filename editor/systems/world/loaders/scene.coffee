@@ -5,10 +5,10 @@ _ = require "lodash"
 
 utils = requireRoot "lib/utils"
 {loadSceneAsync} = requireRoot "lib/loaders/scene-loader"
-{SceneSerializer} = require "../../../scene-serializer"
+{SceneSerializer} = requireRoot "../scene-serializer"
 
 module.exports = class SceneLoader extends System
-	constructor: (client, sceneFile) ->
+	constructor: (client, viewer) ->
 		super client
 		logger.info "Bootstrapping world"
 
@@ -27,6 +27,7 @@ module.exports = class SceneLoader extends System
 		entity.addComponent "world.renderer.scene",
 			backgroundColor: 0xffffff
 		entity.addComponent "world.camera.orbit"
+		entity.addComponent "zanzarah.list.scenes"
 		client.addEntity entity
 
 		@checkArguments()

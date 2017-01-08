@@ -139,6 +139,18 @@ var OrbitControls = function ( object, domElement ) {
 
 	};
 
+	this.setScale = function ( newScale ) {
+
+		scale = newScale;
+
+	};
+
+	this.getScale = function () {
+
+		return scale;
+
+	};
+
 	this.pan = function ( distance ) {
 
 		distance.transformDirection( this.object.matrix );
@@ -233,8 +245,8 @@ var OrbitControls = function ( object, domElement ) {
 			if ( event.button === 1 )
 				state = STATE.PAN;
 		}
-		
-		
+
+
 		if ( state === STATE.ROTATE ) {
 
 			//state = STATE.ROTATE;
@@ -263,7 +275,7 @@ var OrbitControls = function ( object, domElement ) {
 		if ( scope.enabled === false ) return;
 
 		event.preventDefault();
-		
+
 		if ( state === STATE.ROTATE ) {
 
 			rotateEnd.set( event.pageX, event.pageY );
@@ -362,7 +374,7 @@ var OrbitControls = function ( object, domElement ) {
 			case scope.keys.RIGHT:
 				scope.pan( new THREE.Vector3( 1, 0, 0 ) );
 				break;
-			
+
 			case scope.keys.ROTATE:
 				state = STATE.ROTATE;
 				break;
@@ -372,11 +384,11 @@ var OrbitControls = function ( object, domElement ) {
 			case scope.keys.PAN:
 				state = STATE.PAN;
 				break;
-				
+
 		}
 
 	}
-	
+
 	function onKeyUp( event ) {
 
 		switch ( event.keyCode ) {

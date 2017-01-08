@@ -25,7 +25,6 @@ module.exports = class BaseUI extends System
 					"""
 		@ATB.WindowSize @renderer.windowSize.width,
 			@renderer.windowSize.height
-		@_makeSceneListWindow()
 
 		@renderer.THREE.document.on "mousemove", (event) =>
 			@mousePos.x = (event.pageX / @renderer.windowSize.width) * 2 - 1
@@ -35,8 +34,10 @@ module.exports = class BaseUI extends System
 			@wasNoMovement = true
 		@renderer.THREE.document.on "mouseup", (event) =>
 			return unless @wasNoMovement
+
+			loader = client.getSystem("world.loaders.scene") || client.getSystem("world.loaders.model")
+
 			# return if @selectedEntity and @selectedEntity.selectable
-			loader = client.getSystem "world.loader"
 			@selectedEntity?.click? event
 			if @selectedEntity?.editable and event.button is 0
 				loader.sceneEntity.transformControls.attach @selectedEntity.object
@@ -44,7 +45,8 @@ module.exports = class BaseUI extends System
 				loader.sceneEntity.transformControls.detach()
 
 		@renderer.THREE.document.on "keydown", (event) =>
-			controls = client.getSystem("world.loader").sceneEntity.transformControls
+			loader = client.getSystem("world.loaders.scene") || client.getSystem("world.loaders.model")
+			controls = loader.sceneEntity.transformControls
 			switch event.keyCode
 				when 'Q'.charCodeAt 0
 					controls.setSpace if controls.space is "local" then "world" else "local"
@@ -57,22 +59,6 @@ module.exports = class BaseUI extends System
 
 		client.on "render:before", @onRender.bind @
 		client.on "render:after", @onPostRender.bind @
-
-	_makeSceneListWindow: ->
-		@sceneListBar = @ATB.NewBar "sceneList"
-		@ATB.Define " sceneList label='Scene list' "
-		scenesPath = "#{utils.resourcesPath}Worlds/"
-		fs.readdir scenesPath, (err, files) =>
-			return if err
-			idx = 0
-			for file in files
-				do (file) =>
-					@sceneListBar.AddButton "loadScene#{idx++}", =>
-						@client.getSystem("world.loader").loadScene "#{scenesPath}#{file}"
-					, " label='#{file}' help='Load scene from #{scenesPath}#{file}'"
-
-	setScenesWindowVisible: (flag) ->
-		@ATB.Define " sceneList iconified=#{!flag} "
 
 	destroy: ->
 		logger.error "TODO: destroy UI system"
@@ -106,6 +92,6 @@ module.exports = class BaseUI extends System
 
 	select: (entity) ->
 		return if entity is @selectedEntity
-		@selectedEntity.setSelected false if @selectedEntity
+		@selectedEntity.setSelected? false if @selectedEntity
 		@selectedEntity = entity
-		@selectedEntity.setSelected true if @selectedEntity
+		@selectedEntity.setSelected? true if @selectedEntity
