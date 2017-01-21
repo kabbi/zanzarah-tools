@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 const jBinary = require('jbinary');
 
 const {
@@ -15,6 +14,8 @@ const {
   SectionTypes,
   GeometryFlags,
   WorldFlags,
+  FilterModes,
+  AddressModes,
 } = require('./renderware-constants');
 
 // Some utility parsing methods
@@ -77,7 +78,7 @@ exports.typeSet = {
     size: 'uint32',
     version: 'uint16',
     _unknown: 'uint16',
-    // _: ['DumpContext', '>'],
+    _: ['DumpContext', '>'],
   }, ['if', isDataSection, {
     data: 'SectionData',
   }, {
@@ -87,9 +88,9 @@ exports.typeSet = {
       // file, as in some files it has strange size specified, so that last inner
       // sections overlap with the root section end (start inside, end outside).
       // I have no idea why is this so.
-      return type === 'RwClump' ? (this.view.byteLength - (12 * 2)) : size;
+      return type === 'RwClump' ? (this.view.byteLength - 12) : size;
     }],
-  }] /* , ['DumpContext', '<'] */],
+  }], ['DumpContext', '<']],
 
   SectionData: jBinary.Template({
     getBaseType() {
@@ -171,9 +172,9 @@ exports.typeSet = {
     _unknown3: 'Vector3',
   }]],
   'RwTexture->RwData': {
-    filterMode: 'uint8',
-    addrModeU: 'uint8',
-    addrModeV: 'uint8',
+    filterMode: ['enum', 'uint8', FilterModes],
+    addrModeU: ['enum', 'uint8', AddressModes],
+    addrModeV: ['enum', 'uint8', AddressModes],
     _padding: ['const', 'uint8', 0, unexpectedValueError('texture')],
   },
 
@@ -219,7 +220,13 @@ exports.typeSet = {
 
   // Extension sections
   'RwGeometry->RwExtension->RwMaterialSplit': {
-    triangleStrip: 'uint32',
+    faceType: ['enum', 'uint32', { 1: 'RwTriangleStrip' }],
+    splitCount: 'uint32',
+    faceCount: 'uint32',
+    splits: ['array', 'MaterialSplit', 'splitCount'],
+  },
+  'RwAtomicSector->RwExtension->RwMaterialSplit': {
+    faceType: ['enum', 'uint32', { 1: 'RwTriangleStrip' }],
     splitCount: 'uint32',
     faceCount: 'uint32',
     splits: ['array', 'MaterialSplit', 'splitCount'],
@@ -242,35 +249,8 @@ exports.typeSet = {
     _unknown: 'uint32',
   },
   MaterialSplit: {
-    faceIndex: 'uint32',
+    count: 'uint32', // in other sources - faceIndex
     materialIndex: 'uint32',
-    indices: ['array', 'uint32', 'faceIndex'],
+    indices: ['array', 'uint32', 'count'],
   },
 };
-
-if (require.main === module) {
-  const args = require('yargs')
-    .usage('Usage: $0 [options]')
-    .boolean('status-only')
-    .demandCommand(1, 'You must specify the file to parse')
-    .describe('status-only', 'Output only parsing status, success or fail')
-    .help()
-    .argv;
-  const [ fileName ] = args._;
-  jBinary.load(fileName, exports.typeSet)
-    .then(binary => {
-      const data = binary.readAll();
-      if (args.statusOnly) {
-        console.log('OK', fileName);
-      } else {
-        console.log(JSON.stringify(data, null, 2));
-      }
-    })
-    .catch(err => {
-      if (args.statusOnly) {
-        console.log('FAILED', fileName);
-      } else {
-        console.error('Fatal error, cannot continue:', err);
-      }
-    });
-}

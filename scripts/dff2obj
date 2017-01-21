@@ -1,0 +1,117 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const jBinary = require('jbinary');
+const debug = require('debug');
+const yargs = require('yargs');
+
+const { typeSet } = require('../src/parsers/renderware');
+
+const log = debug('app:scripts:dff2obj');
+
+const args = yargs
+  .usage('Usage: $0 [options] <input.dff> <output.obj|mtl>')
+  .demandCommand(2, 'You must specify input and output file names')
+  .help()
+  .argv;
+
+const [ dffFile, objFilePrefix ] = args._;
+
+const convertDffToObj = (dffData, objStream, mtlStream) => {
+  let materialCount = 0;
+  const handlers = {
+    RwGeometry(section) {
+      const { data } = section.children[0];
+      log('Converting geometry section with %d vertices', data.vertexCount);
+      objStream.write(`mtllib ${path.basename(objFilePrefix)}.mtl\n`);
+
+      const { vertices } = data;
+      for (const [ x, y, z ] of vertices) {
+        objStream.write(`v ${x} ${y} ${z}\n`);
+      }
+
+      const { textureCoords = [] } = data;
+      for (const [ u, v ] of textureCoords) {
+        objStream.write(`vt ${u} ${1 - v}\n`);
+      }
+
+      const { normals = [] } = data;
+      for (const [ x, y, z ] of normals) {
+        objStream.write(`vn ${x} ${y} ${z}\n`);
+      }
+
+      let formatFace = (a, b, c) => `f ${a} ${b} ${c}\n`;
+      if (textureCoords.length > 0 && normals.length > 0) {
+        formatFace = (a, b, c) => `f ${a}/${a}/${a} ${b}/${b}/${b} ${c}/${c}/${c}\n`;
+      } else if (normals.length > 0) {
+        formatFace = (a, b, c) => `f ${a}//${a} ${b}//${b} ${c}//${c}\n`;
+      } else if (textureCoords.length > 0) {
+        formatFace = (a, b, c) => `f ${a}/${a} ${b}/${b} ${c}/${c}\n`;
+      }
+
+      const { indices } = data;
+      let lastMaterialIndex = -1;
+      for (const [ b, a, materialIndex, c ] of indices) {
+        if (lastMaterialIndex !== materialIndex) {
+          lastMaterialIndex = materialIndex;
+          objStream.write(`usemtl mtl${materialIndex}\n`);
+        }
+        objStream.write(formatFace(a + 1, b + 1, c + 1));
+      }
+    },
+    RwMaterial(section) {
+      const { textureCount, lighting } = section.children[0].data;
+      log('Converting material section with %d textures', textureCount);
+      if (textureCount === 0) {
+        return true;
+      }
+      const texture = section.children[1];
+      const [ colorFile, alphaFile ] = texture.children.filter(child => (
+        child.type === 'RwString'
+      )).map(child => (
+        child.data
+      ));
+
+      mtlStream.write(`newmtl mtl${materialCount++}\n`);
+
+      const { ambient = 1, diffuse = 1, specular = 0 } = lighting || {};
+      mtlStream.write(`Ka ${ambient} ${ambient} ${ambient}\n`);
+      mtlStream.write(`Kd ${diffuse} ${diffuse} ${diffuse}\n`);
+      mtlStream.write(`Ks ${specular} ${specular} ${specular}\n`);
+
+      if (colorFile) {
+        mtlStream.write(`map_Ka textures/${colorFile}.bmp\n`);
+      }
+      if (alphaFile) {
+        mtlStream.write(`map_d textures/${alphaFile}.bmp\n`);
+      }
+      return true;
+    },
+  };
+  const traverse = sections => {
+    for (const section of sections) {
+      const { type, children } = section;
+      if (handlers[type] && handlers[type](section)) {
+        continue;
+      }
+      if (children) {
+        traverse(children);
+      }
+    }
+  };
+  traverse(dffData);
+  objStream.end();
+  mtlStream.end();
+};
+
+jBinary.load(dffFile, typeSet)
+  .then(binary => {
+    const data = binary.readAll();
+    const objStream = fs.createWriteStream(`${objFilePrefix}.obj`);
+    const mtlStream = fs.createWriteStream(`${objFilePrefix}.mtl`);
+    convertDffToObj(data, objStream, mtlStream);
+  })
+  .catch(err => {
+    console.error('Fatal error, cannot continue:', err);
+  });

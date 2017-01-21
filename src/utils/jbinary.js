@@ -1,6 +1,6 @@
 const jBinary = require('jbinary');
 const padStart = require('lodash/padStart');
-require('util').inspect.defaultOptions.depth = null;
+const debug = require('debug')('app:utils:jbinary');
 
 const BAD_CODER_WARNING = 'Implement me, you porn watching lazy slut!';
 
@@ -14,7 +14,7 @@ exports.Hex = jBinary.Template({
     this.padding = padding;
   },
   read() {
-    let result = this.baseRead().toString(16);
+    const result = this.baseRead().toString(16);
     return this.padding ? padStart(result, this.padding, 0) : result;
   },
   write(value) {
@@ -54,7 +54,7 @@ exports.DynamicArray = jBinary.Template({
   write(values) {
     this.baseWrite({
       length: values.length,
-      values: values,
+      values,
     });
   },
 });
@@ -66,10 +66,10 @@ exports.DumpContext = jBinary.Type({
     this.prefix = prefix || '';
   },
   read() {
-    console.error(this.prefix, this.binary.getContext(this.level));
+    debug(this.prefix, this.binary.getContext(this.level));
   },
   write() {
-    console.error(this.prefix, this.binary.getContext(this.level));
+    debug(this.prefix, this.binary.getContext(this.level));
   },
 });
 

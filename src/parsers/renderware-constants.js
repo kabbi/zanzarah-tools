@@ -49,3 +49,21 @@ exports.WorldFlags = Object.assign({}, exports.GeometryFlags, {
   // Whether to store both vals, or only one
   RpWorldSectorOverlap: 0x40000000,
 });
+
+exports.FilterModes = [
+  'RwNone',
+  'RwNearest',
+  'RwLinear',
+  'RwMipNearest',
+  'RwMipLinear',
+  'RwLinearMipNearest',
+  'RwLinearMipLinear',
+];
+
+exports.AddressModes = [
+  'RwDefault',
+  'RwWrap',
+  'RwMirror',
+  'RwClamp',
+  'RwBorder',
+];

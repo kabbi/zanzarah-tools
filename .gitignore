@@ -1,8 +1,13 @@
-# OS X system files
-.DS_Store
+# Debug, release and temp files
+vendor/zanzapack/zanzapack
+coverage
+build
+.env
 
 # Zanzarah parsed data files
 /editor/data/_fb*.fbs.json
+public/data
+/tmp
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git

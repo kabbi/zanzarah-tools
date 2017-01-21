@@ -1,5 +1,17 @@
-Dff parser:
-    ☐ refactor to use flat (not tree) chunk loading system
+Global:
+  ☐ implement new dff and bsp to obj converter
 
-Aed parser:
-    ☐ start implementing
+Renderware parser:
+  ✔ refactor to use flat (not tree) chunk loading system @done(2017-01-09 01:37) @project(Dff parser)
+  ☐ implement loose mode, to make some checks less strict
+  ☐ better error handling on section boundaries
+  ☐ implement serialization support
+  ☐ write tests for all known corner cases
+
+Refactoring:
+  ☐ start implementing visualization tools with aframe.io
+  ☐ translate remaining dissolve coffee parsers into jbinary js parsers
+    ☐ zanzarah config formats (scene, effect, actor descriptions, etc)
+    ☐ effect files
+    ☐ fbs db files
+    ☐ ska files

@@ -3,6 +3,37 @@ Zanzarah tools
 
 This repo contains all my Zanzarah editing and browsing tools. It came out from the effort to reverse-engineer the wonderful game: **Zanzarah - the Hidden Portal**, to provide all the tools for community to make various mods, modify the world and to enhance this pretty old game.
 
+### Work In progress
+
+I've actually started refactoring all my last tools, written in coffee-script, dissolve for parsing and node-webgl for ui with the modern stack - node v7 and es6, jBinary for parsing, and react/aframe based webapp for editing and visualization tools. This transition is currently undergoing, and I'm gradually removing the old tools and files. Right now, everything in `/src` is the new toolset, and you can already use something like
+
+```sh
+git clone https://github.com/kabbi/zanzarah-tools.git
+cd zanzarah-tools
+npm install
+
+# Paste the path to your zanzarah game here
+export ZANZARAH_ROOT=~/games/Zanzarah
+mkdir -p $ZANZARAH_ROOT/Pack
+# Unpack packed data
+zanzapack u $ZANZARAH_ROOT/Resources/data_0.pak $ZANZARAH_ROOT/Pack $ZANZARAH_ROOT/Pack/packfiles.txt
+# Normalize file structure a bit
+mv $ZANZARAH_ROOT/Pack/RESOURCES/* $ZANZARAH_ROOT/Pack
+# Remove empty dir
+rmdir $ZANZARAH_ROOT/Pack/RESOURCES
+
+# Start the tools
+npm start
+```
+
+There are also some tools in `scripts` folder.
+
+I will update this readme when the transition is finished, and I'll also upload working web-version of all the tools to gh-pages. You can still ask me directly any questions you want.
+
+All the info below is thus deprecated, although stil correct.
+
+### Inspiration
+
 The cool challenge was to implement this entirely using JS (or Coffee, I just love it), so all the desktop apps in this repo have cool 3D interface, and are stil written in JS :). Based entirely on [**three.js**](https://github.com/mrdoob/three.js/) - great javascript webgl library, by [Mrdoob](https://github.com/mrdoob), which was adapted by me to run on desktop OpenGL using [node-webgl](https://github.com/mikeseven/node-webgl).
 
 ### Research
