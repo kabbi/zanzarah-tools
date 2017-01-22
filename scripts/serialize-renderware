@@ -1,0 +1,39 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const jBinary = require('jbinary');
+const yargs = require('yargs');
+
+const { typeSet } = require('../src/parsers/renderware');
+
+const args = yargs
+  .usage('Usage: $0 [options] <input.json> <output.dff>')
+  .boolean('status-only')
+  .demandCommand(1, 'You must specify json file to serialize')
+  .describe('status-only', 'Output only parsing status, success or fail')
+  .help()
+  .argv;
+
+const [ inputFile, outputFile ] = args._;
+const rawInputData = fs.readFileSync(inputFile);
+
+// Pre-allocate jBinary with the size of json, as json is always bigger
+// than the original binary renderware file
+let binary = new jBinary(rawInputData.byteLength, typeSet);
+
+try {
+  const inputJson = JSON.parse(rawInputData);
+  const bytesWritten = binary.writeAll(inputJson);
+  binary = binary.slice(0, bytesWritten);
+  if (args.statusOnly) {
+    console.log('OK', inputFile);
+  } else {
+    binary.saveAs(outputFile || process.stdout);
+  }
+} catch (err) {
+  if (args.statusOnly) {
+    console.log('FAILED', inputFile);
+  } else {
+    console.error('Fatal error, cannot continue:', err);
+  }
+}

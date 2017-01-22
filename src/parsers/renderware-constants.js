@@ -19,7 +19,6 @@ exports.SectionTypes = {
   0x0000050E: 'RwMaterialSplit',
   // What is this thing?
   // 0x0253F2FE: 'RwFrame',
-  0x00000202: 'RwEof',
 };
 
 exports.RootSections = [

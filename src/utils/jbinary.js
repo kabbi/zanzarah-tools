@@ -2,8 +2,6 @@ const jBinary = require('jbinary');
 const padStart = require('lodash/padStart');
 const debug = require('debug')('app:utils:jbinary');
 
-const BAD_CODER_WARNING = 'Implement me, you porn watching lazy slut!';
-
 exports.parent = (prop, level = 1) => function () {
   return this.binary.getContext(level)[prop];
 };
@@ -29,15 +27,16 @@ exports.ChildChunk = jBinary.Type({
   },
   read() {
     const offset = this.binary.tell();
-    const size = this.size();
+    const size = this.toValue(this.size);
     this.binary.skip(size);
 
-    const childBinary = this.binary.slice(offset, offset + this.size());
+    const childBinary = this.binary.slice(offset, offset + size);
     childBinary.contexts = this.binary.contexts;
     return childBinary.read(this.itemType);
   },
-  write() {
-    throw new Error(BAD_CODER_WARNING);
+  write(data) {
+    // We ignore the size in write mode
+    this.binary.write(this.itemType, data);
   },
 });
 
@@ -110,7 +109,7 @@ exports.Tap = jBinary.Type({
 
 /**
  * TODO: I've written this to help myself transition from dissolve dsl, but in
- * jBinary world removing some fields is a bad pattern, as we might need to write
+ * jBinary world removing some fields is a bad decision, as we might need to write
  * them back. So we need to write custom types to read/write dynamic removable
  * fields (like array length, etc), and preserve unknown fields.
  */

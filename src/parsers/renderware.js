@@ -1,4 +1,5 @@
 const jBinary = require('jbinary');
+const debug = require('debug')('app:parsers:renderware');
 
 const {
   Hex,
@@ -7,7 +8,6 @@ const {
   DumpContext,
   DynamicArray,
   BitFlags,
-  parent,
 } = require('../utils/jbinary');
 
 const {
@@ -21,7 +21,7 @@ const {
 // Some utility parsing methods
 
 const sectionVersionEquals = target => function () {
-  const { version } = this.binary.getContext(2);
+  const { version } = this.binary.getContext(1);
   return version === target;
 };
 
@@ -45,6 +45,7 @@ const hasRootFlag = flag => function () {
 };
 
 const isDataSection = function (context) {
+  debug('Detecting section type', this.binary.contexts);
   // RwData always contains data, no child sections
   if (context.type === 'RwData') {
     return true;
@@ -53,7 +54,7 @@ const isDataSection = function (context) {
   if (exports.typeSet[context.type]) {
     return true;
   }
-  const parent = this.binary.getContext(2);
+  const parent = this.binary.getContext(1);
   // Every child of RwExtension can only contain data
   if (parent && parent.type === 'RwExtension') {
     return true;
@@ -72,31 +73,19 @@ exports.typeSet = {
   DumpContext,
   DynamicArray,
 
-  SectionList: ['array', 'Section'],
-  Section: ['extend', {
+  SectionHeader: {
     type: ['enum', 'uint32', SectionTypes],
     size: 'uint32',
     version: 'uint16',
     _unknown: 'uint16',
-    _: ['DumpContext', '>'],
-  }, ['if', isDataSection, {
-    data: 'SectionData',
-  }, {
-    children: ['ChildChunk', 'SectionList', function () {
-      const { type, size } = this.binary.getContext(1);
-      // HACK: Fix-up the size of root section: make it always the size of the
-      // file, as in some files it has strange size specified, so that last inner
-      // sections overlap with the root section end (start inside, end outside).
-      // I have no idea why is this so.
-      return type === 'RwClump' ? (this.view.byteLength - 12) : size;
-    }],
-  }], ['DumpContext', '<']],
-
+  },
+  SectionList: ['array', 'Section'],
   SectionData: jBinary.Template({
     getBaseType() {
       // Data section format may depend on parent (for RwData) or grandparent
       // (for RwExtension children) section type. So we try several combinations
       // here (up to 3 in depth)
+      debug('Detecting section data type', this.binary.contexts);
       const sectionHierarchy = this.binary.contexts.filter(c => c.type).map(c => c.type);
       for (let i = 1; i <= Math.min(3, sectionHierarchy.length); i++) {
         const type = sectionHierarchy.slice(0, i).reverse().join('->');
@@ -108,13 +97,71 @@ exports.typeSet = {
     },
   }),
 
+  Section: jBinary.Type({
+    read() {
+      const header = this.binary.read('SectionHeader');
+
+      const { type, size } = header;
+      let estimatedSize = size;
+      if (type === 'RwClump') {
+        // HACK: Fix-up the size of root section: make it always the size of the
+        // file, as in some files it has strange size specified, so that last inner
+        // sections overlap with the root section end (start inside, end outside).
+        // I have no idea why is this so.
+        estimatedSize = this.view.byteLength - 12;
+      }
+
+      // Put header in context so that we can access section hierarchy in downstream
+      // type handlers (isDataSection, SectionData, etc depend on this behaviour)
+      return this.binary.inContext(header, () => {
+        const dataSection = isDataSection.call(this, header);
+        const contentType = dataSection ? 'SectionData' : 'SectionList';
+
+        debug('>', header, contentType);
+        const content = this.binary.read(['ChildChunk', contentType, estimatedSize]);
+        debug('<', header, content);
+
+        const section = Object.assign({}, header);
+        section[dataSection ? 'data' : 'children'] = content;
+        delete section.size;
+        return section;
+      });
+    },
+    write(section) {
+      debug('Writing section', section);
+      const offset = this.binary.tell();
+      const headerSize = this.binary.write('SectionHeader', section);
+      // Populate known section sizes
+      const augmentedSection = Object.assign({}, section);
+      if (section.type === 'RwString') {
+        const { length } = section.data;
+        augmentedSection.size = Math.ceil(length / 4) * 4;
+      }
+      if (section.data && section.data._unknownData) {
+        const { length } = section.data._unknownData;
+        augmentedSection.size = length;
+      }
+      // Finally just write the section down
+      return this.binary.inContext(augmentedSection, () => {
+        const bytesWritten = section.children ? (
+          this.binary.write('SectionList', section.children)
+        ) : (
+          this.binary.write('SectionData', section.data)
+        );
+        // We now know section size, write it back in the header
+        this.binary.write('uint32', bytesWritten, offset + 4);
+        debug('Bytes written', bytesWritten);
+        return headerSize + bytesWritten;
+      });
+    },
+  }),
+
   UnsupportedSectionData: {
     _unknownData: ['blob', 'size'],
   },
 
   // Static sections
-  RwString: ['string0', parent('size')],
-  RwEof: [],
+  RwString: ['string0', 'size'],
 
   // Model sections
   'RwClump->RwData': {
