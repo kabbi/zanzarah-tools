@@ -14,6 +14,7 @@
     "glob": "^7.1.1",
     "iconv": "^2.1.6",
     "jbinary": "kabbi/jBinary",
+    "jszip": "^3.1.3",
     "lodash": "^4.17.4",
     "node-uuid": "^1.4.3",
     "rufus": "^0.5.7",
@@ -21,8 +22,6 @@
   },
   "devDependencies": {
     "aframe": "^0.4.0",
-    "aframe-orbit-controls-component": "^1.0.0",
-    "aframe-orbit-controls-component-2": "^0.1.0",
     "babel-eslint": "^7.1.1",
     "cors": "^2.8.1",
     "dat.gui": "^0.6.1",
@@ -30,10 +29,13 @@
     "eslint-config-xo-react": "^0.10.0",
     "eslint-plugin-react": "^6.9.0",
     "express": "^4.14.0",
+    "file-saver": "^1.3.3",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "^0.8.4",
     "resolve-path": "^1.3.3",
+    "text-encoding": "^0.6.4",
+    "three": "^0.84.0",
     "xo": "^0.17.1"
   },
   "scripts": {

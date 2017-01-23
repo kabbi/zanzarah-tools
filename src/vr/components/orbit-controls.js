@@ -6,8 +6,7 @@ AFRAME.registerComponent('orbit-controls', {
     this.el.getObject3D('camera').position.x = 10;
     this.controls = new THREE.OrbitControls(
       this.el.getObject3D('camera'),
-      // >TODO: Use renderer.domElement here
-      document.getElementById('root')
+      this.el.canvas
     );
     this.controls.enabled = false;
   },

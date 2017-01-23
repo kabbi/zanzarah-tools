@@ -33,6 +33,15 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     }, onProgress, onError);
   }
 
+  loadBlob(blob, url) {
+    return jBinary.load(blob, typeSet).then(binary => (
+      this.parse(binary.readAll(), url)
+    )).catch(err => {
+      info('Fatal error', err);
+      throw err;
+    });
+  }
+
   setPath(value) {
     this.path = value;
   }

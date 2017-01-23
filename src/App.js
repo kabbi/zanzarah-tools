@@ -1,7 +1,8 @@
 import path from 'path';
-import React, { Component } from 'react';
 import 'aframe/src';
 import { GUI } from 'dat.gui/build/dat.gui';
+import React, { Component } from 'react';
+import 'text-encoding';
 
 import './vr';
 
@@ -15,7 +16,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.setupGui();
+    // this.setupGui();
   }
 
   getIndex() {
@@ -75,7 +76,7 @@ class App extends Component {
     const { modelPath, worldPath } = this.state;
 
     return (
-      <AScene>
+      <AScene drop-load-model="target: #target">
         <a-entity camera="active: true" orbit-controls=""/>
         <a-sky color="#ccccff"/>
         <a-entity grid=""/>
@@ -86,6 +87,7 @@ class App extends Component {
         {worldPath && (
           <a-entity key={worldPath} bsp-model={`bsp: ${worldPath};`}/>
         )}
+        <a-entity id="target"/>
       </AScene>
     );
   }

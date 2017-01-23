@@ -8,7 +8,7 @@ const yargs = require('yargs');
 
 const { typeSet } = require('../src/parsers/renderware');
 
-const log = debug('app:scripts:dff2obj');
+const log = debug('scripts:dff2obj');
 
 const args = yargs
   .usage('Usage: $0 [options] <input.dff> <output.obj|mtl>')
