@@ -8,6 +8,8 @@ import './RenderwareLoader';
 
 const info = debug('app:vr:three:DFFLoader:info');
 
+const ColorCoefficent = 2;
+
 THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
   constructor(manager) {
     super();
@@ -50,41 +52,81 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     this.materials = materials;
   }
 
-  _parseGeometry(section) {
-    const data = this._getData(section);
-    const geometry = new THREE.Geometry();
-
-    const { vertices } = data;
-    for (const [ x, y, z ] of vertices) {
-      geometry.vertices.push(new THREE.Vector3(x, y, z));
-    }
-
-    const { indices, normals, vertexColors } = data;
+  _getTriangleGroups(section) {
+    const groups = {};
+    // >TODO: Utilize material split section here
+    const { indices } = this._getData(section);
     for (const [ b, a, materialIndex, c ] of indices) {
-      const indexes = [a, b, c];
-      const faceNormals = normals ? indexes.map(index => {
-        const [ x, y, z ] = normals[index];
-        return new THREE.Vector3(x, y, z);
-      }) : null;
-      const faceColors = vertexColors ? indexes.map(index => {
-        const color = vertexColors[index];
-        return new THREE.Color(parseInt(color, 16) & 0xFFFFFF);
-      }) : null;
-      geometry.faces.push(new THREE.Face3(a, b, c, faceNormals, faceColors, materialIndex));
+      groups[materialIndex] = groups[materialIndex] || [];
+      groups[materialIndex].push([a, b, c]);
     }
+    return groups;
+  }
 
-    const { textureCoords } = data;
-    const uvLayer = geometry.faceVertexUvs[0] = [];
-    for (const [ b, a, _, c ] of indices) {
-      const uvs = [a, b, c].map(index => {
-        const [ u, v ] = textureCoords[index];
-        return new THREE.Vector2(u, 1 - v);
-      });
-      uvLayer.push(uvs);
+  _parseGeometry(section) {
+    const { vertices, normals, vertexColors, textureCoords} = this._getData(section);
+    const geometry = new THREE.BufferGeometry();
+
+    const triangleGroups = this._getTriangleGroups(section);
+    const triangleCount = Object.keys(triangleGroups).reduce((sum, key) => (
+      sum + triangleGroups[key].length
+    ), 0);
+
+    const positionBuffer = new THREE.BufferAttribute(
+      new Float32Array(triangleCount * 3 * 3), 3
+    );
+    const normalBuffer = normals && new THREE.BufferAttribute(
+      new Float32Array(triangleCount * 3 * 3), 3, true
+    );
+    const colorBuffer = vertexColors && new THREE.BufferAttribute(
+      new Uint8Array(triangleCount * 3 * 3), 3, true
+    );
+    const uvBuffer = textureCoords && new THREE.BufferAttribute(
+      new Float32Array(triangleCount * 3 * 2), 2, true
+    );
+
+    let vertexPos = 0;
+    for (const materialIndex of Object.keys(triangleGroups)) {
+      const faces = triangleGroups[materialIndex];
+      geometry.addGroup(vertexPos, faces.length * 3, Number(materialIndex));
+      for (const indices of faces) {
+        for (const index of indices) {
+          const [ vx, vy, vz ] = vertices[index];
+          positionBuffer.setXYZ(vertexPos, vx, vy, vz);
+          if (normalBuffer) {
+            const [ nx, ny, nz ] = normals[index];
+            normalBuffer.setXYZ(vertexPos, nx, ny, nz);
+          }
+          if (uvBuffer) {
+            const [ u, v ] = textureCoords[index];
+            uvBuffer.setXY(vertexPos, u, 1 - v);
+          }
+          if (colorBuffer) {
+            const color = parseInt(vertexColors[index], 16);
+            colorBuffer.setXYZ(vertexPos,
+              Math.min(((color & 0xFF0000) >> 8 * 2) * ColorCoefficent, 255),
+              Math.min(((color & 0x00FF00) >> 8 * 1) * ColorCoefficent, 255),
+              Math.min(((color & 0x0000FF) >> 8 * 0) * ColorCoefficent, 255),
+            );
+          }
+          vertexPos += 1;
+        }
+      }
     }
 
     geometry.dynamic = false;
-    geometry.computeFaceNormals();
+    geometry.addAttribute('position', positionBuffer);
+    if (normalBuffer) {
+      geometry.addAttribute('normal', normalBuffer, true);
+    } else {
+      geometry.computeFaceNormals();
+    }
+    if (colorBuffer) {
+      geometry.addAttribute('color', colorBuffer, true);
+    }
+    if (uvBuffer) {
+      geometry.addAttribute('uv', uvBuffer);
+    }
     geometry.computeBoundingSphere();
 
     this._geometry = geometry;
@@ -95,8 +137,9 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     if (textureCount > 1) {
       throw new Error('Not supporting materials with more than one texture set');
     }
+    const hasColors = Boolean(this._geometry.getAttribute('color'));
     const material = new THREE.MeshBasicMaterial({
-      vertexColors: THREE.VertexColors,
+      vertexColors: hasColors ? THREE.VertexColors : THREE.NoColors,
     });
     if (!textureCount) {
       return material;
@@ -121,7 +164,10 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     if (colorFile) {
       info('Loading color texture', colorFile);
       resolveTexturePath(url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
-        material.map = loader.load(texturePath);
+        material.map = loader.load(texturePath, () => {
+          material.needsUpdate = true;
+          material.map.sourceFile = url;
+        });
         material.map.wrapS = THREE.RepeatWrapping; // AddresModeMap[addrModeU];
         material.map.wrapT = THREE.RepeatWrapping; // AddresModeMap[addrModeV];
       });
@@ -129,7 +175,10 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     if (alphaFile) {
       info('Loading alpha texture', alphaFile);
       resolveTexturePath(url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
-        material.alphaMap = loader.load(texturePath);
+        material.alphaMap = loader.load(texturePath, () => {
+          material.needsUpdate = true;
+          material.alphaMap.sourceFile = url;
+        });
         material.alphaMap.wrapS = THREE.RepeatWrapping; // AddresModeMap[addrModeU];
         material.alphaMap.wrapT = THREE.RepeatWrapping; // AddresModeMap[addrModeV];
         material.transparent = true;
@@ -168,6 +217,9 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     if (!this._geometry) {
       throw new Error('No geometry found in dff data');
     }
-    return new THREE.Mesh(this._geometry, new THREE.MultiMaterial(this._materials));
+    const material = new THREE.MultiMaterial(this._materials);
+    const mesh = new THREE.Mesh(this._geometry, material);
+    this._geometry = null;
+    return mesh;
   }
 };

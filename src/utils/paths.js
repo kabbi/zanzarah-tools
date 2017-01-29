@@ -16,7 +16,8 @@ exports.CommonPaths = {
 
 exports.getRootPath = () => {
   if (global.window) {
-    return 'http://localhost:4343/';
+    const { hostname } = window.location;
+    return `http://${hostname}:4343/`;
   }
   if (!process.env.ZANZARAH_ROOT) {
     throw new Error('You must specify zanzarah root path in ZANZARAH_ROOT env var');

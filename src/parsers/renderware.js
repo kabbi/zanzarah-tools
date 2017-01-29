@@ -16,6 +16,7 @@ const {
   WorldFlags,
   FilterModes,
   AddressModes,
+  FaceTypes,
 } = require('./renderware-constants');
 
 // Some utility parsing methods
@@ -181,14 +182,14 @@ exports.typeSet = {
     geometryCount: 'uint32',
   },
   'RwGeometry->RwData': ['extend', {
-    flags: 'uint32',
+    flags: ['BitFlags', 'uint32', GeometryFlags],
     triangleCount: 'uint32',
     vertexCount: 'uint32',
     morphTargetCount: 'uint32',
     lighting: 'Lighting',
-  }, ['if', context => context.flags & GeometryFlags.RwPrelit, {
+  }, ['if', context => context.flags.RwPrelit, {
     vertexColors: ['array', 'Color', 'vertexCount'],
-  }], ['if', context => context.flags & GeometryFlags.RwTextured, {
+  }], ['if', context => context.flags.RwTextured, {
     textureCoords: ['array', 'Vector2', 'vertexCount'],
   }], {
     indices: ['array', ['array', 'uint16', 4], 'triangleCount'],
@@ -201,7 +202,7 @@ exports.typeSet = {
       hasNormals: 'uint32',
     },
     vertices: ['array', 'Vector3', 'vertexCount'],
-  }, ['if', context => context.flags & GeometryFlags.RwNormals, {
+  }, ['if', context => context.flags.RwNormals, {
     normals: ['array', 'Vector3', 'vertexCount'],
   }]],
   'RwMaterialList->RwData': {
@@ -267,13 +268,13 @@ exports.typeSet = {
 
   // Extension sections
   'RwGeometry->RwExtension->RwMaterialSplit': {
-    faceType: ['enum', 'uint32', { 1: 'RwTriangleStrip' }],
+    faceType: ['enum', 'uint32', FaceTypes],
     splitCount: 'uint32',
     faceCount: 'uint32',
     splits: ['array', 'MaterialSplit', 'splitCount'],
   },
   'RwAtomicSector->RwExtension->RwMaterialSplit': {
-    faceType: ['enum', 'uint32', { 1: 'RwTriangleStrip' }],
+    faceType: ['enum', 'uint32', FaceTypes],
     splitCount: 'uint32',
     faceCount: 'uint32',
     splits: ['array', 'MaterialSplit', 'splitCount'],

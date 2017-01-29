@@ -1,17 +1,31 @@
 Global:
-  ☐ implement new dff and bsp to obj converter
+  ☐ implement new command-line converters
+    ✔ dff2obj converter @done(2017-01-25 00:16) @project(Global)
+    ☐ bsp2obj converter
 
 Renderware parser:
   ✔ refactor to use flat (not tree) chunk loading system @done(2017-01-09 01:37) @project(Dff parser)
   ☐ implement loose mode, to make some checks less strict
   ☐ better error handling on section boundaries
-  ☐ implement serialization support
+  ✔ implement serialization support @done(2017-01-25 00:16) @project(Renderware parser)
   ☐ write tests for all known corner cases
+    ✔ simple files @done(2017-01-25 00:16) @project(Renderware parser)
+    ✔ wrong root section size @done(2017-01-25 00:17) @project(Renderware parser)
+    ☐ incorrect section sizes
+    ☐ unknown sections, wrong order (data/group)
 
 Refactoring:
-  ☐ start implementing visualization tools with aframe.io
+  ✔ start implementing visualization tools with aframe.io @done(2017-01-25 00:17) @project(Refactoring)
   ☐ translate remaining dissolve coffee parsers into jbinary js parsers
     ☐ zanzarah config formats (scene, effect, actor descriptions, etc)
     ☐ effect files
     ☐ fbs db files
     ☐ ska files
+
+New editor:
+  ☐ lazy dat.gui folders
+  ☐ array support for dnd fs
+  ☐ make complex dat.gui ui
+    ☐ allow loading any files from virtual fs
+    ☐ manage virtual filesystems
+    ☐ export current object

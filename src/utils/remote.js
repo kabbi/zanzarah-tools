@@ -32,14 +32,21 @@ exports.filterFiles = (files, category, ext) => {
 };
 
 exports.resolveTexturePath = (modelPath, fileName) => {
-  const modelDirName = path.basename(
+  let modelDirName = path.basename(
     path.dirname(modelPath)
   );
+  if (modelDirName === '.') {
+    // When there is no dir detected, provide some fake one
+    modelDirName = 'MODELS';
+  }
+
   return exports.fetchIndex().then(files => {
     const existsIndex = keyBy(files);
     const filesToTry = [
       [CommonPaths.Textures, modelDirName, fileName],
       [CommonPaths.WorldTextures, fileName],
+      [CommonPaths.ActorTextures, fileName],
+      [CommonPaths.BackdropTextures, fileName],
       [CommonPaths.MiscTextures, fileName],
     ].map(parts => (
       path.join(...parts)

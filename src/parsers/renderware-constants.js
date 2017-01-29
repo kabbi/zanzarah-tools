@@ -13,6 +13,7 @@ exports.SectionTypes = {
   0x00000010: 'RwClump',
   0x00000014: 'RwAtomic',
   0x0000001A: 'RwGeometryList',
+  0x00000105: 'RwMorphPlugin',
   0x00000108: 'RwAnimPlugin',
   0x00000116: 'RwSkinPlugin',
   0x0000011D: 'RwCollisionPlugin',
@@ -39,9 +40,6 @@ exports.GeometryFlags = {
   RwTextured2: 0x80,
   RwNative: 0x01000000,
   RwNativeInstance: 0x02000000,
-  // These are masks, not actual flags
-  RwFlagsMask: 0xFF,
-  RwNativeFlagsMask: 0x0F000000,
 };
 
 exports.WorldFlags = Object.assign({}, exports.GeometryFlags, {
@@ -65,4 +63,9 @@ exports.AddressModes = [
   'RwMirror',
   'RwClamp',
   'RwBorder',
+];
+
+exports.FaceTypes = [
+  'RwTriangles',
+  'RwTriangleStrip',
 ];

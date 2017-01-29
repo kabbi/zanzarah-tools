@@ -13,11 +13,3 @@ html, body, #root {
 #root > a-scene {
   position: static;
 }
-
-input {
-  position: absolute;
-  z-index: 3000;
-  width: 20%;
-  left: 0;
-  top: 0;
-}

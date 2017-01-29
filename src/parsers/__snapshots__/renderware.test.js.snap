@@ -290,7 +290,18 @@ Array [
                     "hasNormals": 1,
                     "hasPositions": 1,
                   },
-                  "flags": 61,
+                  "flags": Object {
+                    "RwLight": true,
+                    "RwModulateMaterialColor": false,
+                    "RwNative": false,
+                    "RwNativeInstance": false,
+                    "RwNormals": true,
+                    "RwPositions": false,
+                    "RwPrelit": true,
+                    "RwTextured": true,
+                    "RwTextured2": false,
+                    "RwTriangleStrip": true,
+                  },
                   "indices": Array [
                     Array [
                       1,
@@ -896,7 +907,7 @@ Array [
                         "type": "Buffer",
                       },
                     },
-                    "type": 261,
+                    "type": "RwMorphPlugin",
                     "version": 772,
                   },
                 ],
@@ -1134,7 +1145,18 @@ Array [
                     "hasNormals": 1,
                     "hasPositions": 1,
                   },
-                  "flags": 60,
+                  "flags": Object {
+                    "RwLight": true,
+                    "RwModulateMaterialColor": false,
+                    "RwNative": false,
+                    "RwNativeInstance": false,
+                    "RwNormals": true,
+                    "RwPositions": false,
+                    "RwPrelit": true,
+                    "RwTextured": true,
+                    "RwTextured2": false,
+                    "RwTriangleStrip": false,
+                  },
                   "indices": Array [
                     Array [
                       1,
@@ -1314,7 +1336,7 @@ Array [
                     "_unknown": 0,
                     "data": Object {
                       "faceCount": 6,
-                      "faceType": 0,
+                      "faceType": "RwTriangles",
                       "splitCount": 1,
                       "splits": Array [
                         Object {
@@ -1657,7 +1679,18 @@ Array [
                     "hasNormals": 1,
                     "hasPositions": 1,
                   },
-                  "flags": 48,
+                  "flags": Object {
+                    "RwLight": true,
+                    "RwModulateMaterialColor": false,
+                    "RwNative": false,
+                    "RwNativeInstance": false,
+                    "RwNormals": true,
+                    "RwPositions": false,
+                    "RwPrelit": false,
+                    "RwTextured": false,
+                    "RwTextured2": false,
+                    "RwTriangleStrip": false,
+                  },
                   "indices": Array [
                     Array [
                       1,
@@ -1766,7 +1799,7 @@ Array [
                     "_unknown": 0,
                     "data": Object {
                       "faceCount": 3,
-                      "faceType": 0,
+                      "faceType": "RwTriangles",
                       "splitCount": 1,
                       "splits": Array [
                         Object {
@@ -1796,7 +1829,7 @@ Array [
                         "type": "Buffer",
                       },
                     },
-                    "type": 261,
+                    "type": "RwMorphPlugin",
                     "version": 772,
                   },
                 ],
@@ -1876,11 +1909,9 @@ Array [
           "colSectorSize": 0,
           "flags": Object {
             "RpWorldSectorOverlap": true,
-            "RwFlagsMask": false,
             "RwLight": true,
             "RwModulateMaterialColor": true,
             "RwNative": false,
-            "RwNativeFlagsMask": false,
             "RwNativeInstance": false,
             "RwNormals": true,
             "RwPositions": false,
@@ -2111,7 +2142,7 @@ Array [
                 "_unknown": 0,
                 "data": Object {
                   "faceCount": 6,
-                  "faceType": 0,
+                  "faceType": "RwTriangles",
                   "splitCount": 1,
                   "splits": Array [
                     Object {
@@ -2184,11 +2215,9 @@ Array [
       "colSectorSize": 0,
       "flags": Object {
         "RpWorldSectorOverlap": true,
-        "RwFlagsMask": false,
         "RwLight": true,
         "RwModulateMaterialColor": true,
         "RwNative": false,
-        "RwNativeFlagsMask": false,
         "RwNativeInstance": false,
         "RwNormals": true,
         "RwPositions": false,

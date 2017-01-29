@@ -72,7 +72,8 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     geometry.dynamic = false;
     geometry.computeFaceNormals();
     geometry.computeBoundingSphere();
-    return geometry;
+    return new THREE.BufferGeometry()
+      .fromGeometry(geometry);
   }
 
   _parseMaterial(section) {

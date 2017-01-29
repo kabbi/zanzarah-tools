@@ -8,11 +8,11 @@ import './vr';
 
 import AScene from './components/aframe/AScene';
 import { fetchIndex, filterFiles } from './utils/remote';
+import { getRootPath } from './utils/paths';
 
 class App extends Component {
   state = {
-    modelPath: null,
-    worldPath: null,
+    sceneLoaded: false,
   };
 
   componentDidMount() {
@@ -72,22 +72,31 @@ class App extends Component {
     });
   }
 
+  handleLoad = () => {
+    this.setState({ sceneLoaded: true });
+  };
+
   render() {
-    const { modelPath, worldPath } = this.state;
+    const { sceneLoaded } = this.state;
 
     return (
-      <AScene drop-load-model="target: #target">
+      <AScene onLoad={this.handleLoad}>
         <a-entity camera="active: true" orbit-controls=""/>
         <a-sky color="#ccccff"/>
         <a-entity grid=""/>
 
-        {modelPath && (
-          <a-entity key={modelPath} dff-model={`dff: ${modelPath};`}/>
+        {sceneLoaded && (
+          <a-entity>
+            <a-entity>
+              <a-entity fs-dragndrop=""/>
+              <a-entity fs-xhr={`path: ${getRootPath()}`}/>
+            </a-entity>
+
+            <a-entity gui=""/>
+
+            <a-entity selected-model=""/>
+          </a-entity>
         )}
-        {worldPath && (
-          <a-entity key={worldPath} bsp-model={`bsp: ${worldPath};`}/>
-        )}
-        <a-entity id="target"/>
       </AScene>
     );
   }

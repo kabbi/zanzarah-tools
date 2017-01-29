@@ -5,7 +5,7 @@ const ReadTypeMappings = {
   text: 'readAsText',
 };
 
-exports.readFile = (file, type = 'arraybuffer') => (
+exports.readFile = (file, type = 'text') => (
   new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = reject;

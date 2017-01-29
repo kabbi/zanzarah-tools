@@ -1,16 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import noop from 'lodash/noop';
 
 class AScene extends Component {
   static propTypes = {
     children: PropTypes.node,
+    onLoad: PropTypes.func,
   };
 
-  state = {
-    loaded: false,
+  static defaultProps = {
+    onLoad: noop,
   };
 
   handleSceneLoaded = () => {
-    this.setState({ loaded: true });
+    const { onLoad } = this.props;
+    onLoad();
   };
 
   sceneRef = element => {
