@@ -1,4 +1,4 @@
-/** @jsx html */
+/** @jsx dom */
 
 import path from 'path';
 import AFRAME, { THREE } from 'aframe/src';
@@ -6,8 +6,9 @@ import debug from 'debug';
 import jBinary from 'jbinary';
 
 import { typeSet as sceneTypeSet } from '../parsers/zanzarah-scene';
-import { html, bind } from '../utils/components';
-import { CommonPaths, getRootPath } from '../utils/paths';
+import { bind } from '../utils/components';
+import { dom } from '../utils/dom';
+import { getRootPath } from '../utils/paths';
 
 const warn = debug('app:systems:loader:warn');
 
@@ -16,7 +17,7 @@ AFRAME.registerSystem('loader', {
 
   init() {
     this.target = document.getElementById('target');
-    this.unbind = bind(this, 'handleLoadFile', this.sceneEl, 'file-selected');
+    bind(this, 'handleLoadFile', this.sceneEl, 'file-selected');
   },
 
   clear() {
@@ -38,12 +39,20 @@ AFRAME.registerSystem('loader', {
 
   handleOBJ(fileName) {
     this.target.appendChild(
-      <a-entity obj-model={{ obj: fileName }}/>
+      <a-entity
+        obj-model={{ obj: fileName }}
+        transformable
+        selectable
+        />
     );
   },
   handleDFF(fileName) {
     this.target.appendChild(
-      <a-entity dff-model={{ dff: fileName }}/>
+      <a-entity
+        dff-model={{ dff: fileName }}
+        transformable
+        selectable
+        />
     );
   },
   handleBSP(fileName) {
@@ -68,33 +77,21 @@ AFRAME.registerSystem('loader', {
             {SceneOrigin && (
               <a-entity
                 position={SceneOrigin.origin.join(' ')}
-                geometry={{
-                  primitive: 'sphere',
-                  segmentsWidth: 4,
-                  segmentsHeight: 2,
-                  radius: 1,
-                }}
-                material={{
-                  color: 'blue',
-                  wireframe: true,
-                }}
+                z-entity={{ type: 'origin', singleton: true }}
                 />
             )}
             {Misc && (
               <a-entity
-                bsp-model={{
-                  bsp: `${CommonPaths.Worlds}/${Misc.sceneFile.toUpperCase()}.BSP`,
-                }}
+                z-entity={{ type: 'world', singleton: true }}
+                z-world={{ fileName: Misc.sceneFile }}
                 />
             )}
             {Models_v3 && Models_v3.models.map(model => (
               <a-entity
-                key={model.id}
-                position={model.position.join(' ')}
-                scale={model.scale.join(' ')}
-                dff-model={{
-                  dff: `${CommonPaths.StaticModels}/${model.fileName.toUpperCase()}.DFF`,
-                }}
+                selectable
+                transformable
+                z-entity={{ type: 'model_v3' }}
+                z-model={model}
                 />
             ))}
           </a-entity>

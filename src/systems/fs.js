@@ -1,7 +1,8 @@
 import AFRAME from 'aframe/src';
 import _debug from 'debug';
 
-const info = _debug('app:systems:fs:info');
+const verbose = _debug('app:systems:fs:verbose');
+const error = _debug('app:systems:fs:error');
 
 AFRAME.registerSystem('fs', {
   schema: {},
@@ -16,10 +17,10 @@ AFRAME.registerSystem('fs', {
       if (!hasFile) {
         continue;
       }
-      info('Using fs %s to fulfil the request %o', fs.id, options);
+      verbose('Using fs %s to fulfil the request %o', fs.id, options);
       return fs.load(options, onLoad, onProgress, onError);
     }
-    info('File not found %s', options.url);
+    error('File not found %s', options.url);
     if (onError) {
       onError(new Error(`File not found: ${options.url}`));
     }

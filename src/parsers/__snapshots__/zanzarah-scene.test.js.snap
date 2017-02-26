@@ -74,6 +74,11 @@ Object {
     "models": Array [
       Object {
         "_unknownColor": "ffffffff",
+        "_unknownFlag": 0,
+        "_unknownFlags": Array [
+          0,
+          0,
+        ],
         "_unknownFloats": Array [
           8,
           12,
@@ -81,6 +86,8 @@ Object {
           1,
           1,
         ],
+        "_unknownInt1": 0,
+        "_unknownInt2": -1,
         "_unknownVectors": Array [
           Array [
             10.557332038879395,
@@ -93,13 +100,6 @@ Object {
             -0.937002420425415,
           ],
         ],
-        "_unkownFlag": 0,
-        "_unkownFlags": Array [
-          0,
-          0,
-        ],
-        "_unkownInt1": 0,
-        "_unkownInt2": -1,
         "fileName": "ifl04h",
         "id": 28,
       },
@@ -123,6 +123,10 @@ Object {
       1,
     ],
     "_unknownFloat": 0,
+    "_unknownFloats": Array [
+      0.10000000149011612,
+      46,
+    ],
     "_unknownOptionalBytes": Array [
       41,
       52,
@@ -139,10 +143,6 @@ Object {
       -0.5698028802871704,
       0.4558423161506653,
     ],
-    "_unkownFloats": Array [
-      0.10000000149011612,
-      46,
-    ],
     "sceneFile": "sc_3253",
     "scenePath": "..\\Resources\\Worlds\\",
     "texturePath": "..\\Resources\\Textures\\Worlds\\",
@@ -151,9 +151,9 @@ Object {
     "models": Array [
       Object {
         "_unknownColor": "ff868686",
+        "_unknownFlag1": 0,
+        "_unknownFlag2": 0,
         "_unknownInt": -1,
-        "_unkownFlag1": 0,
-        "_unkownFlag2": 0,
         "fileName": "ido01h",
         "id": 1,
         "position": Array [
@@ -174,9 +174,9 @@ Object {
       },
       Object {
         "_unknownColor": "ffffffff",
+        "_unknownFlag1": 0,
+        "_unknownFlag2": 1,
         "_unknownInt": -1,
-        "_unkownFlag1": 0,
-        "_unkownFlag2": 1,
         "fileName": "ifl03h",
         "id": 2,
         "position": Array [
@@ -338,11 +338,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          0.7591406106948853,
-          -0.05777226760983467,
-          -0.648405909538269,
-        ],
-        "_unkownVector": Array [
           10.371908187866211,
           31.653139114379883,
           17.129343032836914,
@@ -361,11 +356,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.17345939576625824,
-          -0.1488700956106186,
-          -0.9735873341560364,
-        ],
-        "_unkownVector": Array [
           11.955608367919922,
           30.400392532348633,
           15.556184768676758,
@@ -384,11 +374,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.745530366897583,
-          -0.5600088834762573,
-          -0.3613913953304291,
-        ],
-        "_unkownVector": Array [
           13.085081100463867,
           30.560749053955078,
           13.454812049865723,
@@ -407,11 +392,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.1186022087931633,
-          -0.9817796945571899,
-          -0.14863041043281555,
-        ],
-        "_unkownVector": Array [
           12.872611999511719,
           30.1561279296875,
           13.440271377563477,
@@ -430,11 +410,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          0.8578603267669678,
-          -0.47725433111190796,
-          0.19066941738128662,
-        ],
-        "_unkownVector": Array [
           14.100581169128418,
           30.1541805267334,
           15.156375885009766,
@@ -453,11 +428,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.846588671207428,
-          -0.40055859088897705,
-          0.350474089384079,
-        ],
-        "_unkownVector": Array [
           16.19293785095215,
           30.24066162109375,
           11.976113319396973,
@@ -476,11 +446,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.24567367136478424,
-          -0.9686687588691711,
-          -0.03636462613940239,
-        ],
-        "_unkownVector": Array [
           13.876931190490723,
           30.25874137878418,
           13.780603408813477,
@@ -499,11 +464,6 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
-          -0.09985959529876709,
-          -0.9138188362121582,
-          0.39349132776260376,
-        ],
-        "_unkownVector": Array [
           13.260506629943848,
           30.234582901000977,
           14.429807662963867,

@@ -6,7 +6,8 @@ import { resolveTexturePath } from '../utils/remote';
 import { typeSet } from '../parsers/renderware';
 import './RenderwareLoader';
 
-const info = debug('app:three:BSPLoader:info');
+const verbose = debug('app:three:BSPLoader:verbose');
+const error = debug('app:three:BSPLoader:error');
 
 const ColorMultiplier = 2;
 
@@ -18,17 +19,17 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
   }
 
   load(url, onLoad, onProgress, onError) {
-    info('Loading data %s', url);
+    verbose('Loading data %s', url);
     this._url = url;
     const loader = new THREE.XHRLoader(this.manager);
     loader.setPath(this.path);
     loader.setResponseType('blob');
     loader.load(url, blob => {
-      info('Loaded data from %s, %d bytes', url, blob.size);
+      verbose('Loaded data from %s, %d bytes', url, blob.size);
       jBinary.load(blob, typeSet).then(binary => {
         onLoad(this.parse(binary.readAll()), this._meta);
       }).catch(err => {
-        info('Fatal error', err);
+        error('Fatal error', err);
         if (onError) {
           onError(err);
         }
@@ -98,7 +99,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     loader.setPath(this.path);
     if (colorFile) {
       resolveTexturePath(this._url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
-        info('Loading color texture', colorFile, texturePath);
+        verbose('Loading color texture', colorFile, texturePath);
         material.map = loader.load(texturePath, () => {
           material.needsUpdate = true;
         });
@@ -108,7 +109,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     }
     if (alphaFile) {
       resolveTexturePath(this._url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
-        info('Resolved texture path', alphaFile, texturePath);
+        verbose('Resolved texture path', alphaFile, texturePath);
         material.alphaMap = loader.load(texturePath, () => {
           material.needsUpdate = true;
         });
@@ -123,7 +124,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
 
   _handleRwMaterialList(section) {
     const { count } = this._getData(section);
-    info('Found %d materials', count);
+    verbose('Found %d materials', count);
     this._materials = section.children.slice(1).map(child => (
       this._parseMaterial(child)
     ));
@@ -132,7 +133,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
 
   _handleRwWorld(section) {
     const { invWorldOrigin, flags } = this._getData(section);
-    info('Found world section', flags);
+    verbose('Found world section', flags);
     this._meta = {
       invertedOrigin: invWorldOrigin,
     };
@@ -142,7 +143,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     const data = this._getData(section);
 
     const { vertices, indices } = data;
-    info('Processing sector, %d vertices, %d indices', vertices.length, indices.length);
+    verbose('Processing sector, %d vertices, %d indices', vertices.length, indices.length);
 
     const geometry = this._parseGeometry(data);
     const material = new THREE.MultiMaterial(this._materials);
@@ -157,7 +158,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
       throw new Error('No geometry found in bsp data');
     }
 
-    info('Parsed %d groups', this._group.children.length);
+    verbose('Parsed %d groups', this._group.children.length);
 
     return this._group;
   }

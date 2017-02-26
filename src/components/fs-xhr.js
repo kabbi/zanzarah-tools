@@ -18,7 +18,7 @@ AFRAME.registerComponent('fs-xhr', {
     const { path, indexPath } = this.data;
 
     let indexPromise = null;
-    const loader = new THREE.XHRLoader();
+    const loader = new THREE.FileLoader();
     loader.setPath(path);
 
     const fetchIndex = () => {

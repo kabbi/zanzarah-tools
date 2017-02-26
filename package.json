@@ -58,16 +58,18 @@
     "space": true,
     "parser": "babel-eslint",
     "rules": {
+      "import/no-unassigned-import": "off",
+      "unicorn/filename-case": "off",
+      "react/jsx-key": "off",
       "comma-dangle": [
         "error",
         "always-multiline"
       ],
-      "import/no-unassigned-import": "off",
-      "unicorn/filename-case": "off",
       "array-bracket-spacing": "off",
       "object-curly-spacing": "off",
       "camelcase": "off",
-      "new-cap": "off"
+      "new-cap": "off",
+      "no-mixed-operators": "off"
     },
     "overrides": [
       {

@@ -6,7 +6,8 @@ import { resolveTexturePath } from '../utils/remote';
 import { typeSet } from '../parsers/renderware';
 import './RenderwareLoader';
 
-const info = debug('app:three:DFFLoader:info');
+const verbose = debug('app:three:DFFLoader:verbose');
+const error = debug('app:three:DFFLoader:error');
 
 const ColorCoefficent = 2;
 
@@ -18,16 +19,16 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
   }
 
   load(url, onLoad, onProgress, onError) {
-    info('Loading data %s', url);
+    verbose('Loading data %s', url);
     const loader = new THREE.XHRLoader(this.manager);
     loader.setPath(this.path);
     loader.setResponseType('blob');
     loader.load(url, blob => {
-      info('Loaded data from %s, %d bytes', url, blob.size);
+      verbose('Loaded data from %s, %d bytes', url, blob.size);
       jBinary.load(blob, typeSet).then(binary => {
         onLoad(this.parse(binary.readAll(), url));
       }).catch(err => {
-        info('Fatal error', err);
+        error('Fatal error', err);
         if (onError) {
           onError(err);
         }
@@ -39,7 +40,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     return jBinary.load(blob, typeSet).then(binary => (
       this.parse(binary.readAll(), url)
     )).catch(err => {
-      info('Fatal error', err);
+      verbose('Fatal error', err);
       throw err;
     });
   }
@@ -162,7 +163,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     const loader = new THREE.TextureLoader();
     loader.setPath(this.path);
     if (colorFile) {
-      info('Loading color texture', colorFile);
+      verbose('Loading color texture', colorFile);
       resolveTexturePath(url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
         material.map = loader.load(texturePath, () => {
           material.needsUpdate = true;
@@ -173,7 +174,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
       });
     }
     if (alphaFile) {
-      info('Loading alpha texture', alphaFile);
+      verbose('Loading alpha texture', alphaFile);
       resolveTexturePath(url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
         material.alphaMap = loader.load(texturePath, () => {
           material.needsUpdate = true;
@@ -190,7 +191,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
 
   _handleRwFrameList(section) {
     const { frames } = this._getData(section);
-    info('Found %d frames', frames.length);
+    verbose('Found %d frames', frames.length);
     this._frames = frames;
     return true;
   }
@@ -199,13 +200,13 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     if (this._geometry) {
       throw new Error('We currently support only single-geometry objects');
     }
-    info('Found geometry %o', section);
+    verbose('Found geometry %o', section);
     this._parseGeometry(section);
   }
 
   _handleRwMaterialList(section, _, url) {
     const { count } = this._getData(section);
-    info('Found %d materials', count);
+    verbose('Found %d materials', count);
     this._materials = section.children.slice(1).map(child => (
       this._parseMaterial(child, url)
     ));

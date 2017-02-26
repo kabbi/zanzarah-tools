@@ -1,19 +1,24 @@
-/** @jsx html */
+/** @jsx dom */
 
-import './index.css';
-
-import { html } from './utils/components';
+import { dom } from './utils/dom';
 import { getRootPath } from './utils/paths';
 
+import './index.css';
 import './components';
 import './systems';
 import './three';
 
 document.getElementById('root').replaceWith(
   <a-scene>
-    <a-entity camera orbit-controls/>
     <a-sky color="#ccccff"/>
     <a-entity grid/>
+    <a-entity
+      camera
+      orbit-controls
+      mouse-cursor={{
+        objects: '[selectable]',
+      }}
+      />
 
     <a-entity
       gui

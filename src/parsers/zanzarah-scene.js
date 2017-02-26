@@ -82,7 +82,7 @@ exports.typeSet = {
     _unknownOptionalBytes: ['array', 'uint8', 4],
     _unknownFloat: 'float32',
   }], {
-    _unkownFloats: ['array', 'float32', 2],
+    _unknownFloats: ['array', 'float32', 2],
   }],
   LightsData: {
     lights: ['DynamicArray', ['extend', {
@@ -94,7 +94,7 @@ exports.typeSet = {
       _unknownVectors: ['array', 'Vector3', 2],
     }], ['if', context => context.type === 'UnknownLight128', {
       _unknownFloat: 'float32',
-      _unkownVector: 'Vector3',
+      _unknownVector: 'Vector3',
     }], ['if', context => context.type === 'UnknownLight128', {
       _unknownInt: 'uint32',
       _unknownVectors: ['array', 'Vector3', 2],
@@ -107,10 +107,10 @@ exports.typeSet = {
       _unknownVectors: ['array', 'Vector3', 2],
       _unknownFloats: ['array', 'float32', 5],
       _unknownColor: 'IntColor',
-      _unkownFlags: ['array', 'uint8', 2],
-      _unkownInt1: 'uint32',
-      _unkownFlag: 'uint8',
-      _unkownInt2: 'int32',
+      _unknownFlags: ['array', 'uint8', 2],
+      _unknownInt1: 'uint32',
+      _unknownFlag: 'uint8',
+      _unknownInt2: 'int32',
     }],
   },
   Models_v3Data: {
@@ -121,18 +121,18 @@ exports.typeSet = {
       rotation: 'Vector3',
       scale: 'Vector3',
       _unknownColor: 'IntColor',
-      _unkownFlag1: 'uint8',
+      _unknownFlag1: 'uint8',
       _unknownInt: 'int32',
-      _unkownFlag2: 'uint8',
+      _unknownFlag2: 'uint8',
     }],
   },
   DynamicModelsData: {
     models: ['DynamicArray', {
       id: 'uint32',
-      _unkownInts: ['array', 'uint32', 2],
+      _unknownInts: ['array', 'uint32', 2],
       position: 'Vector3',
       rotation: 'Vector3',
-      _unkownFloats: ['array', 'float32', 2],
+      _unknownFloats: ['array', 'float32', 2],
       _unknownVector: 'Vector3',
       _unknownInts2: ['array', 'uint32', 2],
       _unknownThings: ['array', {
@@ -156,10 +156,10 @@ exports.typeSet = {
     }, ['if', context => context.type === 'UnknownTrigger0', {
       _unknownVectors: ['array', 'Vector3', 2],
     }], ['if', context => context.type === 'UnknownTrigger1', {
-      _unkownVector: 'Vector3',
+      _unknownVector: 'Vector3',
       _unknownFloat: 'float32',
     }], ['if', context => context.type === 'UnknownTrigger2', {
-      _unkownVector: 'Vector3',
+      _unknownVector: 'Vector3',
     }]]],
   },
   '2DSamples_v2Data': {

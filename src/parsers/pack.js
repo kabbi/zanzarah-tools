@@ -1,5 +1,5 @@
-const jBinary = require('jbinary');
-const debug = require('debug')('app:parsers:pack');
+// const jBinary = require('jbinary');
+// const debug = require('debug')('app:parsers:pack');
 
 const {
   Hex,
