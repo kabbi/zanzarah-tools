@@ -1,4 +1,4 @@
-exports[`parsers - zanzarah parses file with wrong RwClump size 1`] = `
+exports[`parsers - renderware parses file with wrong RwClump size 1`] = `
 Array [
   Object {
     "_unknown": 0,
@@ -976,7 +976,7 @@ Array [
 ]
 `;
 
-exports[`parsers - zanzarah parses smallest known files 1`] = `
+exports[`parsers - renderware parses smallest known files 1`] = `
 Array [
   Object {
     "_unknown": 0,
@@ -1059,7 +1059,7 @@ Array [
 ]
 `;
 
-exports[`parsers - zanzarah parses smallest known files 2`] = `
+exports[`parsers - renderware parses smallest known files 2`] = `
 Array [
   Object {
     "_unknown": 0,
@@ -1387,7 +1387,7 @@ Array [
 ]
 `;
 
-exports[`parsers - zanzarah parses smallest known files 3`] = `
+exports[`parsers - renderware parses smallest known files 3`] = `
 Array [
   Object {
     "_unknown": 0,
@@ -1898,7 +1898,7 @@ Array [
 ]
 `;
 
-exports[`parsers - zanzarah parses smallest known files 4`] = `
+exports[`parsers - renderware parses smallest known files 4`] = `
 Array [
   Object {
     "_unknown": 0,

@@ -2,11 +2,11 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { resolveTexturePath } from '../../utils/remote';
-import { typeSet } from '../../parsers/renderware';
+import { resolveTexturePath } from '../utils/remote';
+import { typeSet } from '../parsers/renderware';
 import './RenderwareLoader';
 
-const info = debug('app:vr:three:BSPLoader:info');
+const info = debug('app:three:BSPLoader:info');
 
 const ColorMultiplier = 2;
 
@@ -134,7 +134,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     const { invWorldOrigin, flags } = this._getData(section);
     info('Found world section', flags);
     this._meta = {
-      origin: invWorldOrigin,
+      invertedOrigin: invWorldOrigin,
     };
   }
 

@@ -3,14 +3,13 @@ import AFRAME from 'aframe/src';
 import debug from 'debug';
 import JSZip from 'jszip';
 
-import { readFile } from '../../utils/files';
+import { readFile } from '../utils/files';
 
-const info = debug('app:vr:components:fs-dragndrop:info');
+const info = debug('app:components:fs-dragndrop:info');
 
 AFRAME.registerComponent('fs-dragndrop', {
   init() {
-    const { el: { sceneEl } } = this;
-    const { systems: { fs }, canvas } = sceneEl;
+    const { el: { components: { fs } } } = this;
 
     this.files = [];
     this.archives = [];
@@ -18,8 +17,8 @@ AFRAME.registerComponent('fs-dragndrop', {
 
     this.handleDrop = this.handleDrop.bind(this);
     this.handleDragOver = this.handleDragOver.bind(this);
-    canvas.addEventListener('dragover', this.handleDragOver);
-    canvas.addEventListener('drop', this.handleDrop);
+    document.addEventListener('dragover', this.handleDragOver);
+    document.addEventListener('drop', this.handleDrop);
 
     this.cleanup = fs.registerFileSystem({
       id: 'dnd',
@@ -88,22 +87,34 @@ AFRAME.registerComponent('fs-dragndrop', {
     event.preventDefault();
     const { dataTransfer: { files } } = event;
     info('Updating file list %o', files);
-    this.files = Array.from(files);
-    this.archives = this.files.filter(file => (
+    // It's originally FileList instance
+    const filesArray = Array.from(files);
+    this.files.push(...filesArray);
+    this.archives.push(...filesArray.filter(file => (
       path.extname(file.name) === '.zip'
     )).map(file => (
       readFile(file, 'arraybuffer').then(data => {
         const zip = new JSZip();
         return zip.loadAsync(data);
       })
-    ));
-    this.el.emit('changed');
+    )));
+    this.el.emit('fs-updated', {
+      id: 'dnd',
+      newfiles: filesArray,
+    });
+  },
+
+  reset() {
+    this.files = [];
+    this.archives = [];
+    this.el.emit('fs-updated', {
+      id: 'dnd',
+    });
   },
 
   remove() {
-    const { el: { sceneEl: { canvas } } } = this;
-    canvas.removeEventListener('dragover', this.handleDragOver);
-    canvas.removeEventListener('drop', this.handleDrop);
+    document.removeEventListener('dragover', this.handleDragOver);
+    document.removeEventListener('drop', this.handleDrop);
     this.cleanup();
   },
 });

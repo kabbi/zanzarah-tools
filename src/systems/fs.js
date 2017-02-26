@@ -1,7 +1,7 @@
 import AFRAME from 'aframe/src';
 import _debug from 'debug';
 
-const info = _debug('app:vr:systems:fs:info');
+const info = _debug('app:systems:fs:info');
 
 AFRAME.registerSystem('fs', {
   schema: {},
@@ -10,21 +10,6 @@ AFRAME.registerSystem('fs', {
     this.fileSystems = [];
   },
 
-  registerFileSystem(fs) {
-    this.fileSystems.push(fs);
-    return () => {
-      const index = this.fileSystems.indexOf(fs);
-      if (index === -1) {
-        return;
-      }
-      this.fileSystems.splice(index, 1);
-    };
-  },
-  getFilesystemById(id) {
-    return this.fileSystems.find(fs => (
-      fs.id === id
-    ));
-  },
   async load(options, onLoad, onProgress, onError) {
     for (const fs of this.fileSystems) {
       const hasFile = await fs.includes(options);

@@ -25,7 +25,7 @@ const serialize = data => {
   return binary.view.buffer.slice(0, bytesWritten);
 };
 
-describe('parsers - zanzarah', () => {
+describe('parsers - renderware', () => {
   it('exports typeSet to parse', () => {
     expect(typeSet).toBeDefined();
   });

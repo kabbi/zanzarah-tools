@@ -20,6 +20,13 @@ exports.Hex = jBinary.Template({
   },
 });
 
+exports.Switch = jBinary.Template({
+  params: ['condition'],
+  getBaseType() {
+    return this.toValue(this.condition);
+  },
+});
+
 exports.ChildChunk = jBinary.Type({
   params: ['itemType', 'size'],
   resolve(getType) {
@@ -54,6 +61,24 @@ exports.DynamicArray = jBinary.Template({
     this.baseWrite({
       length: values.length,
       values,
+    });
+  },
+});
+
+exports.DynamicString = jBinary.Template({
+  setParams() {
+    this.baseType = {
+      length: 'uint32',
+      str: ['string', 'length'],
+    };
+  },
+  read() {
+    return this.baseRead().str;
+  },
+  write(str) {
+    this.baseWrite({
+      length: str.length,
+      str,
     });
   },
 });

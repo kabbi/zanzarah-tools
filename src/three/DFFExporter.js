@@ -3,10 +3,10 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { typeSet } from '../../parsers/renderware';
-import { section } from '../../utils/renderware';
+import { typeSet } from '../parsers/renderware';
+import { section } from '../utils/renderware';
 
-const warn = debug('app:vr:three:DFFExporter:warn');
+const warn = debug('app:three:DFFExporter:warn');
 
 THREE.DFFExporter = class DFFExporter {
   export(object) {
@@ -74,7 +74,7 @@ THREE.DFFExporter = class DFFExporter {
 
     const positionBuffer = geometry.getAttribute('position');
     const normalBuffer = geometry.getAttribute('normal');
-    const colorBuffer = geometry.getAttribute('color');
+    // const colorBuffer = geometry.getAttribute('color');
     const uvBuffer = geometry.getAttribute('uv');
 
     const data = {

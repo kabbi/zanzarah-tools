@@ -1,0 +1,568 @@
+exports[`parsers - zanzarah scene parses smallest known files 1`] = `
+Object {
+  "2DSamples_v2": Object {
+    "samples": Array [],
+  },
+  "3DSamples_v2": Object {
+    "samples": Array [],
+  },
+  "AmbientSound": Object {
+    "count": 0,
+  },
+  "Backdrop": Object {
+    "fileName": "5_Swamp",
+  },
+  "Behaviours": Object {
+    "behaviours": Array [
+      Object {
+        "modelId": 1,
+        "type": 900,
+      },
+    ],
+  },
+  "Dataset": Object {
+    "_unknownData": Array [
+      181,
+      12,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      177,
+      62,
+      117,
+      192,
+      0,
+      0,
+      205,
+      205,
+      1,
+      0,
+      0,
+      0,
+      0,
+      205,
+      205,
+      205,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    "_unknownStrings": Array [
+      "",
+      "",
+    ],
+  },
+  "DynamicModels": Object {
+    "models": Array [],
+  },
+  "Effects_v2": Object {
+    "effects": Array [],
+  },
+  "FOModels_v4": Object {
+    "models": Array [
+      Object {
+        "_unknownColor": "ffffffff",
+        "_unknownFloats": Array [
+          8,
+          12,
+          1,
+          1,
+          1,
+        ],
+        "_unknownVectors": Array [
+          Array [
+            10.557332038879395,
+            31.438854217529297,
+            13.713237762451172,
+          ],
+          Array [
+            0.3493209779262543,
+            0,
+            -0.937002420425415,
+          ],
+        ],
+        "_unkownFlag": 0,
+        "_unkownFlags": Array [
+          0,
+          0,
+        ],
+        "_unkownInt1": 0,
+        "_unkownInt2": -1,
+        "fileName": "ifl04h",
+        "id": 28,
+      },
+    ],
+  },
+  "Lights": Object {
+    "lights": Array [],
+  },
+  "Misc": Object {
+    "_flag": 1,
+    "_unknownBytes": Array [
+      57,
+      48,
+      36,
+      0,
+    ],
+    "_unknownColor": Array [
+      0,
+      0,
+      0,
+      1,
+    ],
+    "_unknownFloat": 0,
+    "_unknownOptionalBytes": Array [
+      41,
+      52,
+      31,
+      0,
+    ],
+    "_unknownVector1": Array [
+      8.091316223144531,
+      31.32491683959961,
+      9.48287582397461,
+    ],
+    "_unknownVector2": Array [
+      0.6837635040283203,
+      -0.5698028802871704,
+      0.4558423161506653,
+    ],
+    "_unkownFloats": Array [
+      0.10000000149011612,
+      46,
+    ],
+    "sceneFile": "sc_3253",
+    "scenePath": "..\\Resources\\Worlds\\",
+    "texturePath": "..\\Resources\\Textures\\Worlds\\",
+  },
+  "Models_v3": Object {
+    "models": Array [
+      Object {
+        "_unknownColor": "ff868686",
+        "_unknownInt": -1,
+        "_unkownFlag1": 0,
+        "_unkownFlag2": 0,
+        "fileName": "ido01h",
+        "id": 1,
+        "position": Array [
+          11.674039840698242,
+          31.57732391357422,
+          16.910022735595703,
+        ],
+        "rotation": Array [
+          -0.7141005396842957,
+          0,
+          0.7000429630279541,
+        ],
+        "scale": Array [
+          1,
+          1,
+          1,
+        ],
+      },
+      Object {
+        "_unknownColor": "ffffffff",
+        "_unknownInt": -1,
+        "_unkownFlag1": 0,
+        "_unkownFlag2": 1,
+        "fileName": "ifl03h",
+        "id": 2,
+        "position": Array [
+          10.511805534362793,
+          31.437274932861328,
+          13.36729907989502,
+        ],
+        "rotation": Array [
+          0.03404809534549713,
+          0,
+          -0.9994198083877563,
+        ],
+        "scale": Array [
+          1,
+          1,
+          1,
+        ],
+      },
+    ],
+  },
+  "Music": Object {
+    "count": 3452816845,
+  },
+  "Scene": Object {
+    "_unknownItems": Array [
+      Object {
+        "_unknownInts": Array [
+          28,
+          2,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          1,
+          3,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          15,
+          4,
+        ],
+        "_unknownString": "doorway 1243",
+      },
+      Object {
+        "_unknownInts": Array [
+          16,
+          4,
+        ],
+        "_unknownString": "single player",
+      },
+      Object {
+        "_unknownInts": Array [
+          17,
+          4,
+        ],
+        "_unknownString": "ns3104",
+      },
+      Object {
+        "_unknownInts": Array [
+          19,
+          4,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          22,
+          4,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          23,
+          4,
+        ],
+        "_unknownString": "ns3105",
+      },
+      Object {
+        "_unknownInts": Array [
+          24,
+          4,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          2,
+          3,
+        ],
+        "_unknownString": "",
+      },
+      Object {
+        "_unknownInts": Array [
+          25,
+          4,
+        ],
+        "_unknownString": "",
+      },
+    ],
+  },
+  "SceneOrigin": Object {
+    "origin": Array [
+      14.091316223144531,
+      26.32491683959961,
+      13.48287582397461,
+    ],
+  },
+  "TextureProperties": Object {
+    "properties": Array [
+      Object {
+        "fileName": "default",
+        "value": -2,
+      },
+      Object {
+        "fileName": "ifl00th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "ifl03th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "xsp01th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "xsp04th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "xsp06th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "xwo00th",
+        "value": 14,
+      },
+      Object {
+        "fileName": "xwo09th",
+        "value": 14,
+      },
+    ],
+  },
+  "Triggers": Object {
+    "triggers": Array [
+      Object {
+        "_unknownFlag": 0,
+        "_unknownFloat": 1.149999976158142,
+        "_unknownInts": Array [
+          0,
+          13,
+          13,
+          1243,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          0.7591406106948853,
+          -0.05777226760983467,
+          -0.648405909538269,
+        ],
+        "_unkownVector": Array [
+          10.371908187866211,
+          31.653139114379883,
+          17.129343032836914,
+        ],
+        "id": 15,
+        "type": "UnknownTrigger1",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          1,
+          0,
+          0,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.17345939576625824,
+          -0.1488700956106186,
+          -0.9735873341560364,
+        ],
+        "_unkownVector": Array [
+          11.955608367919922,
+          30.400392532348633,
+          15.556184768676758,
+        ],
+        "id": 16,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          3,
+          2207288756,
+          0,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.745530366897583,
+          -0.5600088834762573,
+          -0.3613913953304291,
+        ],
+        "_unkownVector": Array [
+          13.085081100463867,
+          30.560749053955078,
+          13.454812049865723,
+        ],
+        "id": 17,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          5,
+          1,
+          2,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.1186022087931633,
+          -0.9817796945571899,
+          -0.14863041043281555,
+        ],
+        "_unkownVector": Array [
+          12.872611999511719,
+          30.1561279296875,
+          13.440271377563477,
+        ],
+        "id": 19,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          5,
+          2,
+          2,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          0.8578603267669678,
+          -0.47725433111190796,
+          0.19066941738128662,
+        ],
+        "_unkownVector": Array [
+          14.100581169128418,
+          30.1541805267334,
+          15.156375885009766,
+        ],
+        "id": 22,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          3,
+          1567274756,
+          0,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.846588671207428,
+          -0.40055859088897705,
+          0.350474089384079,
+        ],
+        "_unkownVector": Array [
+          16.19293785095215,
+          30.24066162109375,
+          11.976113319396973,
+        ],
+        "id": 23,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          5,
+          0,
+          0,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.24567367136478424,
+          -0.9686687588691711,
+          -0.03636462613940239,
+        ],
+        "_unkownVector": Array [
+          13.876931190490723,
+          30.25874137878418,
+          13.780603408813477,
+        ],
+        "id": 24,
+        "type": "UnknownTrigger2",
+      },
+      Object {
+        "_unknownFlag": 0,
+        "_unknownInts": Array [
+          5,
+          3,
+          2,
+          0,
+          0,
+        ],
+        "_unknownString": "",
+        "_unknownVector": Array [
+          -0.09985959529876709,
+          -0.9138188362121582,
+          0.39349132776260376,
+        ],
+        "_unkownVector": Array [
+          13.260506629943848,
+          30.234582901000977,
+          14.429807662963867,
+        ],
+        "id": 25,
+        "type": "UnknownTrigger2",
+      },
+    ],
+  },
+  "Version": Object {
+    "_unknown": Array [
+      0,
+      0,
+      0,
+    ],
+    "_unknown1": 3,
+    "author": "snoopy",
+    "buildVersion": 4,
+    "date": "13.11.2001",
+    "time": "13:05",
+    "year": 2001,
+  },
+  "VertexModifiers": Object {
+    "modifiers": Array [],
+  },
+  "WaypointSystem": Object {
+    "_hack": Array [
+      0,
+      0,
+    ],
+    "_reserved": 65535,
+    "_unknownData": Array [
+      0,
+      112,
+      190,
+      77,
+      60,
+      104,
+      59,
+      163,
+      114,
+      17,
+      209,
+      61,
+      0,
+      142,
+      175,
+      55,
+      16,
+      67,
+      32,
+      1,
+      12,
+      124,
+      18,
+      0,
+    ],
+    "empty": 0,
+    "version": 6,
+  },
+}
+`;

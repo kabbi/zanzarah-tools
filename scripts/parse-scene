@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+const jBinary = require('jbinary');
+const yargs = require('yargs');
+
+const { typeSet } = require('../src/parsers/zanzarah-scene');
+
+const args = yargs
+  .usage('Usage: $0 [options]')
+  .boolean('status-only')
+  .demandCommand(1, 'You must specify the file to parse')
+  .describe('status-only', 'Output only parsing status, success or fail')
+  .help()
+  .argv;
+
+const [ fileName ] = args._;
+jBinary.load(fileName, typeSet)
+  .then(binary => {
+    const data = binary.readAll();
+    if (args.statusOnly) {
+      console.log('OK', fileName);
+    } else {
+      console.log(JSON.stringify(data, null, 2));
+    }
+  })
+  .catch(err => {
+    if (args.statusOnly) {
+      console.log('FAILED', fileName);
+    } else {
+      console.error('Fatal error, cannot continue:', err);
+    }
+  });

@@ -1,6 +1,6 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { getRootPath } from '../../utils/paths';
+import { getRootPath } from '../utils/paths';
 
 AFRAME.registerComponent('bsp-model', {
   dependencies: ['material'],
@@ -37,10 +37,12 @@ AFRAME.registerComponent('bsp-model', {
 
     bspLoader.load(bspUrl, (bspModel, meta) => {
       this.model = bspModel;
-      const [ x, y, z ] = meta.origin;
-      el.setAttribute('position', `${x} ${y} ${z}`);
       el.setObject3D('mesh', bspModel);
-      el.emit('model-loaded', {format: 'bsp', model: bspModel});
+      el.emit('model-loaded', {
+        format: 'bsp',
+        model: bspModel,
+        meta,
+      });
     });
   },
 });

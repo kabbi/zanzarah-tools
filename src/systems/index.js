@@ -1,3 +1,3 @@
-import { requireAll } from '../../utils/require';
+import { requireAll } from '../utils/require';
 
 requireAll(require.context('./', false, /^\.\/.*\.js$/));

@@ -2,11 +2,11 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { resolveTexturePath } from '../../utils/remote';
-import { typeSet } from '../../parsers/renderware';
+import { resolveTexturePath } from '../utils/remote';
+import { typeSet } from '../parsers/renderware';
 import './RenderwareLoader';
 
-const info = debug('app:vr:three:DFFLoader:info');
+const info = debug('app:three:DFFLoader:info');
 
 const ColorCoefficent = 2;
 

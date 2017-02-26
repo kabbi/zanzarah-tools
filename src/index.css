@@ -6,7 +6,7 @@ body {
 
 html, body, #root {
   min-width: 100%;
-  min-height: 100%;
+  height: 100%;
 }
 
 /* Fixup aframe position issues when rendered into container */

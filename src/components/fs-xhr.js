@@ -2,19 +2,19 @@ import AFRAME, { THREE } from 'aframe/src';
 import debug from 'debug';
 import keyBy from 'lodash/keyBy';
 
-import { fetchJson } from '../../utils/remote';
+import { fetchJson } from '../utils/remote';
 
-const info = debug('app:vr:components:fs-xhr:info');
+const info = debug('app:components:fs-xhr:info');
 
 AFRAME.registerComponent('fs-xhr', {
+  dependencies: ['fs'],
   schema: {
     path: { type: 'string' },
     indexPath: { default: '' },
   },
 
   init() {
-    const { el: { sceneEl } } = this;
-    const { systems: { fs } } = sceneEl;
+    const { el: { components: { fs } } } = this;
     const { path, indexPath } = this.data;
 
     let indexPromise = null;
