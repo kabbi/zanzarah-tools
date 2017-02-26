@@ -1,5 +1,7 @@
 /** @jsx html */
 
+import './index.css';
+
 import { html } from './utils/components';
 import { getRootPath } from './utils/paths';
 
