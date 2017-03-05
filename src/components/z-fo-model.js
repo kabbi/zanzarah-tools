@@ -3,18 +3,20 @@ import AFRAME from 'aframe/src';
 import { bind } from '../utils/components';
 import { CommonPaths } from '../utils/paths';
 
-AFRAME.registerComponent('z-model', {
+AFRAME.registerComponent('z-fo-model', {
   dependencies: ['z-entity'],
   schema: {
     id: { type: 'string' },
+    fileName: { type: 'string' },
     position: { type: 'array' },
     rotation: { type: 'array' },
+    _unknownFloats: { type: 'string' },
     scale: { type: 'array' },
-    fileName: { type: 'string' },
-    _unknownColor: { type: 'number' },
-    _unknownFlag1: { type: 'number' },
-    _unknownFlag2: { type: 'number' },
-    _unknownInt: { type: 'number' },
+    _unknownColor: { type: 'color' },
+    _unknownFlags: { type: 'array' },
+    _unknownInt1: { type: 'number' },
+    _unknownFlag: { type: 'number' },
+    _unknownInt2: { type: 'number' },
   },
 
   init() {
@@ -23,10 +25,9 @@ AFRAME.registerComponent('z-model', {
       this.el, 'model-loaded'
     );
     const { object3D } = this.el;
-    const { fileName, position, rotation, scale } = this.data;
+    const { fileName, position, rotation } = this.data;
     object3D.position.fromArray(position);
     object3D.rotation.y = Math.atan2(rotation[0], rotation[2]);
-    object3D.scale.fromArray(scale);
     this.el.setAttribute('dff-model', {
       dff: `${CommonPaths.StaticModels}/${fileName.toUpperCase()}.DFF`,
     });

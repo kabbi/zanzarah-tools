@@ -82,26 +82,26 @@ Object {
         "_unknownFloats": Array [
           8,
           12,
-          1,
-          1,
-          1,
         ],
         "_unknownInt1": 0,
         "_unknownInt2": -1,
-        "_unknownVectors": Array [
-          Array [
-            10.557332038879395,
-            31.438854217529297,
-            13.713237762451172,
-          ],
-          Array [
-            0.3493209779262543,
-            0,
-            -0.937002420425415,
-          ],
-        ],
         "fileName": "ifl04h",
         "id": 28,
+        "position": Array [
+          10.557332038879395,
+          31.438854217529297,
+          13.713237762451172,
+        ],
+        "rotation": Array [
+          0.3493209779262543,
+          0,
+          -0.937002420425415,
+        ],
+        "scale": Array [
+          1,
+          1,
+          1,
+        ],
       },
     ],
   },
@@ -328,7 +328,6 @@ Object {
     "triggers": Array [
       Object {
         "_unknownFlag": 0,
-        "_unknownFloat": 1.149999976158142,
         "_unknownInts": Array [
           0,
           13,
@@ -338,11 +337,17 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          0.7591406106948853,
+          -0.05777226760983467,
+          -0.648405909538269,
+        ],
+        "id": 15,
+        "position": Array [
           10.371908187866211,
           31.653139114379883,
           17.129343032836914,
         ],
-        "id": 15,
+        "radius": 1.149999976158142,
         "type": "UnknownTrigger1",
       },
       Object {
@@ -356,11 +361,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.17345939576625824,
+          -0.1488700956106186,
+          -0.9735873341560364,
+        ],
+        "id": 16,
+        "position": Array [
           11.955608367919922,
           30.400392532348633,
           15.556184768676758,
         ],
-        "id": 16,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -374,11 +384,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.745530366897583,
+          -0.5600088834762573,
+          -0.3613913953304291,
+        ],
+        "id": 17,
+        "position": Array [
           13.085081100463867,
           30.560749053955078,
           13.454812049865723,
         ],
-        "id": 17,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -392,11 +407,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.1186022087931633,
+          -0.9817796945571899,
+          -0.14863041043281555,
+        ],
+        "id": 19,
+        "position": Array [
           12.872611999511719,
           30.1561279296875,
           13.440271377563477,
         ],
-        "id": 19,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -410,11 +430,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          0.8578603267669678,
+          -0.47725433111190796,
+          0.19066941738128662,
+        ],
+        "id": 22,
+        "position": Array [
           14.100581169128418,
           30.1541805267334,
           15.156375885009766,
         ],
-        "id": 22,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -428,11 +453,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.846588671207428,
+          -0.40055859088897705,
+          0.350474089384079,
+        ],
+        "id": 23,
+        "position": Array [
           16.19293785095215,
           30.24066162109375,
           11.976113319396973,
         ],
-        "id": 23,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -446,11 +476,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.24567367136478424,
+          -0.9686687588691711,
+          -0.03636462613940239,
+        ],
+        "id": 24,
+        "position": Array [
           13.876931190490723,
           30.25874137878418,
           13.780603408813477,
         ],
-        "id": 24,
         "type": "UnknownTrigger2",
       },
       Object {
@@ -464,11 +499,16 @@ Object {
         ],
         "_unknownString": "",
         "_unknownVector": Array [
+          -0.09985959529876709,
+          -0.9138188362121582,
+          0.39349132776260376,
+        ],
+        "id": 25,
+        "position": Array [
           13.260506629943848,
           30.234582901000977,
           14.429807662963867,
         ],
-        "id": 25,
         "type": "UnknownTrigger2",
       },
     ],
@@ -490,11 +530,8 @@ Object {
     "modifiers": Array [],
   },
   "WaypointSystem": Object {
-    "_hack": Array [
-      0,
-      0,
-    ],
     "_reserved": 65535,
+    "_unknownCount": 0,
     "_unknownData": Array [
       0,
       112,
@@ -521,6 +558,9 @@ Object {
       18,
       0,
     ],
+    "_v2": Array [],
+    "_v3": Array [],
+    "_v5": Array [],
     "empty": 0,
     "version": 6,
   },

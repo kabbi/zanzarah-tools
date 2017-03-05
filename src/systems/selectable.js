@@ -31,6 +31,9 @@ AFRAME.registerSystem('selectable', {
     }
   },
 
+  getSelectedEntity() {
+    return this.selected;
+  },
   select(entity) {
     if (this.selected === entity) {
       return;

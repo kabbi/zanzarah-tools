@@ -12,6 +12,7 @@ const {
   LightTypes,
   TriggerTypes,
   EffectTypes,
+  EffectTypesV2,
 } = require('./zanzarah-scene-constants');
 
 exports.typeSet = {
@@ -95,7 +96,7 @@ exports.typeSet = {
     }], ['if', context => context.type === 'UnknownLight128', {
       _unknownFloat: 'float32',
       _unknownVector: 'Vector3',
-    }], ['if', context => context.type === 'UnknownLight128', {
+    }], ['if', context => context.type === 'UnknownLight129', {
       _unknownInt: 'uint32',
       _unknownVectors: ['array', 'Vector3', 2],
     }]]],
@@ -104,8 +105,10 @@ exports.typeSet = {
     models: ['DynamicArray', {
       id: 'uint32',
       fileName: 'DynamicString',
-      _unknownVectors: ['array', 'Vector3', 2],
-      _unknownFloats: ['array', 'float32', 5],
+      position: 'Vector3',
+      rotation: 'Vector3',
+      _unknownFloats: ['array', 'float32', 2],
+      scale: 'Vector3',
       _unknownColor: 'IntColor',
       _unknownFlags: ['array', 'uint8', 2],
       _unknownInt1: 'uint32',
@@ -154,12 +157,13 @@ exports.typeSet = {
       _unknownInts: ['array', 'uint32', 5],
       _unknownString: 'DynamicString',
     }, ['if', context => context.type === 'UnknownTrigger0', {
-      _unknownVectors: ['array', 'Vector3', 2],
+      position: 'Vector3',
+      rotation: 'Vector3',
     }], ['if', context => context.type === 'UnknownTrigger1', {
-      _unknownVector: 'Vector3',
-      _unknownFloat: 'float32',
+      position: 'Vector3',
+      radius: 'float32',
     }], ['if', context => context.type === 'UnknownTrigger2', {
-      _unknownVector: 'Vector3',
+      position: 'Vector3',
     }]]],
   },
   '2DSamples_v2Data': {
@@ -178,10 +182,38 @@ exports.typeSet = {
       _unknownInts: ['array', 'uint32', 5],
     }],
   },
-  Effects_v2Data: {
+  EffectsData: {
     effects: ['DynamicArray', ['extend', {
       id: 'uint32',
       type: ['enum', 'uint32', EffectTypes],
+    }, ['if', context => context.type === 'UnknownEffect1', {
+      _unknownInt: 'uint32',
+      _unknownVectors: ['array', 'Vector3', 2],
+    }, ['if', context => context.type === 'UnknownEffect4', {
+      _unknownInt: 'uint32',
+      _unknownVector: 'Vector3',
+    }, ['if', context => context.type === 'UnknownEffect5', {
+      _unknownInt: 'uint32',
+      _unknownVectors: ['array', 'Vector3', 2],
+    }, ['if', context => context.type === 'UnknownEffect6', {
+      _unknownInt: 'uint32',
+      _unknownVectors: ['array', 'Vector3', 2],
+    }, ['if', context => context.type === 'UnknownEffect7', {
+      _unknownString: 'DynamicString',
+      _unknownVector: 'Vector3',
+    }, ['if', context => context.type === 'UnknownEffect10', {
+      _unknownInt: 'uint32',
+      _unknownVectors: ['array', 'Vector3', 2],
+    }, ['if', context => context.type === 'UnknownEffect13', {
+      _unknownString: 'DynamicString',
+      _unknownVectors: ['array', 'Vector3', 3],
+      _unknownInt: 'uint32',
+    }]]]]]]]]],
+  },
+  Effects_v2Data: {
+    effects: ['DynamicArray', ['extend', {
+      id: 'uint32',
+      type: ['enum', 'uint32', EffectTypesV2],
       _unknownInts: ['array', 'uint32', 5],
     }, ['if', context => context.type === 'UnknownEffect1', {
       _unknownInt: 'uint32',
@@ -192,6 +224,10 @@ exports.typeSet = {
     }], ['if', context => context.type === 'UnknownEffect10', {
       _unknownInt: 'uint32',
       _unknownVectors: ['array', 'Vector3', 2],
+    }], ['if', context => context.type === 'UnknownEffect13', {
+      _unknownString: 'DynamicString',
+      _unknownVectors: ['array', 'Vector3', 3],
+      _unknownInt: 'uint32',
     }], ['if', context => context.type === 'SnowFlakesEffect', {
       _unknownInt: 'uint32',
     }]]],
@@ -245,7 +281,19 @@ exports.typeSet = {
     empty: 'uint32',
   }, ['if', context => context.version >= 5, {
     _unknownData: ['array', 'uint8', 24],
-    _hack: ['array', 'uint32', 2],
+    _unknownCount: 'uint32',
+    _v5: ['array', {
+      _unknownInt1: 'uint32',
+      _unknownInt2: 'uint32',
+      _unknownVector1: 'Vector3',
+      _unknownArray1: ['DynamicArray', 'uint32'],
+      _unknownArray2: ['DynamicArray', 'uint32'],
+    }, '_unknownCount'],
+    _v2: ['DynamicArray', {
+      _unknownInt: 'uint32',
+      _unknownArray: ['DynamicArray', 'uint32'],
+    }],
+    _v3: ['array', ['DynamicArray', 'uint32'], '_unknownCount'],
   }], {
     _reserved: ['const', 'uint32', 0xFFFF, true],
   }],

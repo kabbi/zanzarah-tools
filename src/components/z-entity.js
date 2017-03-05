@@ -3,11 +3,15 @@ import AFRAME, { THREE } from 'aframe/src';
 const MarkerColors = {
   origin: 'blue',
   world: 'orange',
+  light: 'white',
+  trigger: 0x6929a5,
   model_v3: 'red',
+  fo_model_v4: 'yellow',
 };
 
 const MarkerSizes = {
   world: 2,
+  light: 0.5,
 };
 
 AFRAME.registerComponent('z-entity', {
@@ -30,7 +34,13 @@ AFRAME.registerComponent('z-entity', {
     this.el.removeObject3D('marker');
   },
 
+  getMarkerColor() {
+    return this.marker.material.color;
+  },
+  setMarkerScale(value) {
+    this.marker.scale.set(value, value, value);
+  },
   toggleMarker(visible) {
-    this.el.getObject3D('marker').visible = visible;
+    this.marker.visible = visible;
   },
 });

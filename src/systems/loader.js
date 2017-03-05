@@ -46,6 +46,30 @@ AFRAME.registerSystem('loader', {
         />
     );
   },
+  handleMTL(fileName) {
+    const { systems: { selectable } } = this.sceneEl;
+    const selected = selectable.getSelectedEntity();
+    if (!selected || !selected.hasAttribute('obj-model')) {
+      warn('Can only apply mtl to selected obj model');
+      return;
+    }
+    selected.setAttribute('obj-model', 'mtl', fileName);
+  },
+  handleImage(fileName) {
+    const { systems: { selectable } } = this.sceneEl;
+    const selected = selectable.getSelectedEntity();
+    if (!selected) {
+      warn('Can only apply image to selected model');
+      return;
+    }
+    warn('Not yet supported: %s', fileName);
+  },
+  handleBMP(fileName) {
+    this.handleImage(fileName);
+  },
+  handlePNG(fileName) {
+    this.handleImage(fileName);
+  },
   handleDFF(fileName) {
     this.target.appendChild(
       <a-entity
@@ -67,31 +91,93 @@ AFRAME.registerSystem('loader', {
     xhrLoader.load(fileName, blob => {
       jBinary.load(blob, sceneTypeSet).then(binary => {
         const scene = binary.readAll();
-        const { SceneOrigin, Misc, Models_v3 } = scene;
+        const {
+          SceneOrigin,
+          Misc,
+          Lights,
+          Triggers,
+          FOModels_v4,
+          Models_v3,
+        } = scene;
+
         const offset = new THREE.Vector3()
           .fromArray(SceneOrigin.origin || [0, 0, 0])
           .multiplyScalar(-1);
+
+        const commonProps = {
+          selectable: true,
+          transformable: true,
+          gui: {
+            lazy: true,
+          },
+          'gui-opener': {
+            event: 'click',
+          },
+          'gui-entity-editor': {
+            include: 'z-.*',
+          },
+        };
 
         this.target.appendChild(
           <a-entity position={offset.toArray().join(' ')}>
             {SceneOrigin && (
               <a-entity
                 position={SceneOrigin.origin.join(' ')}
-                z-entity={{ type: 'origin', singleton: true }}
+                z-entity={{
+                  type: 'origin',
+                  singleton: true,
+                }}
                 />
             )}
             {Misc && (
               <a-entity
-                z-entity={{ type: 'world', singleton: true }}
-                z-world={{ fileName: Misc.sceneFile }}
+                z-entity={{
+                  type: 'world',
+                  singleton: true,
+                }}
+                z-world={{
+                  fileName: Misc.sceneFile,
+                }}
                 />
             )}
             {Models_v3 && Models_v3.models.map(model => (
               <a-entity
-                selectable
-                transformable
-                z-entity={{ type: 'model_v3' }}
+                {...commonProps}
                 z-model={model}
+                z-entity={{
+                  id: model.id,
+                  type: 'model_v3',
+                }}
+                />
+            ))}
+            {FOModels_v4 && FOModels_v4.models.map(model => (
+              <a-entity
+                {...commonProps}
+                z-fo-model={model}
+                z-entity={{
+                  id: model.id,
+                  type: 'fo_model_v4',
+                }}
+                />
+            ))}
+            {Lights && Lights.lights.map(light => (
+              <a-entity
+                {...commonProps}
+                z-light={light}
+                z-entity={{
+                  id: light.id,
+                  type: 'light',
+                }}
+                />
+            ))}
+            {Triggers && Triggers.triggers.map(trigger => (
+              <a-entity
+                {...commonProps}
+                z-trigger={trigger}
+                z-entity={{
+                  id: trigger.id,
+                  type: 'trigger',
+                }}
                 />
             ))}
           </a-entity>

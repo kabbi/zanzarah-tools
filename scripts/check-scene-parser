@@ -1,0 +1,5 @@
+#!/bin/bash
+SCRIPTS_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+find $ZANZARAH_ROOT/Resources/Worlds \
+  -name "*.scn" \
+  -exec $SCRIPTS_PATH/parse-scene --status-only {} \;
