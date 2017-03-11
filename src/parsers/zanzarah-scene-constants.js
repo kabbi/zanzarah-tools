@@ -27,3 +27,13 @@ exports.TriggerTypes = [
   'UnknownTrigger1',
   'UnknownTrigger2',
 ];
+
+exports.TriggerKind = [
+  'Portal',
+  'PlayerSpawn',
+  'UnknownKind2',
+  'NPC',
+  // Used in cutscenes
+  'CameraStop',
+  // 28 and 35 are related to the sun
+];

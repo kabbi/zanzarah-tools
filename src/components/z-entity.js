@@ -5,6 +5,7 @@ const MarkerColors = {
   world: 'orange',
   light: 'white',
   trigger: 0x6929a5,
+  dynamic_model: 'green',
   model_v3: 'red',
   fo_model_v4: 'yellow',
 };
@@ -16,12 +17,19 @@ const MarkerSizes = {
 
 AFRAME.registerComponent('z-entity', {
   schema: {
-    id: { type: 'string' },
     type: { type: 'string' },
     singleton: { default: false },
   },
 
   init() {
+    this.createMarker();
+    this.createArrow();
+  },
+  remove() {
+    this.el.removeObject3D('marker');
+  },
+
+  createMarker() {
     const { type } = this.data;
     this.marker = this.el.getOrCreateObject3D('marker', THREE.Mesh);
     this.marker.material.color = new THREE.Color(MarkerColors[type] || 'black');
@@ -30,8 +38,16 @@ AFRAME.registerComponent('z-entity', {
       MarkerSizes[type] || 1, 4, 2
     );
   },
-  remove() {
-    this.el.removeObject3D('marker');
+  createArrow() {
+    const { type } = this.data;
+    this.arrow = new THREE.ArrowHelper(
+      new THREE.Vector3(0, 0, 1),
+      new THREE.Vector3(0, 0, 0),
+      (MarkerSizes[type] || 1) * 2,
+      this.getMarkerColor()
+    );
+    this.arrow.cone.material.wireframe = true;
+    this.el.setObject3D('arrow', this.arrow);
   },
 
   getMarkerColor() {
@@ -42,5 +58,6 @@ AFRAME.registerComponent('z-entity', {
   },
   toggleMarker(visible) {
     this.marker.visible = visible;
+    this.arrow.visible = visible;
   },
 });

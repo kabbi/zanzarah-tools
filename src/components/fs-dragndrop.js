@@ -8,6 +8,10 @@ import { readFile } from '../utils/files';
 const info = debug('app:components:fs-dragndrop:info');
 
 AFRAME.registerComponent('fs-dragndrop', {
+  schema: {
+    openOnDrop: { default: true },
+  },
+
   init() {
     const { el: { components: { fs } } } = this;
 
@@ -102,6 +106,11 @@ AFRAME.registerComponent('fs-dragndrop', {
       id: 'dnd',
       newfiles: filesArray,
     });
+    const { openOnDrop } = this.data;
+    if (openOnDrop && filesArray.length === 1) {
+      const fileName = filesArray[0].name;
+      this.el.emit('file-selected', { fileName });
+    }
   },
 
   reset() {

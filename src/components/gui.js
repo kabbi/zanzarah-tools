@@ -8,9 +8,13 @@ AFRAME.registerComponent('gui', {
 
   init() {
     const { lazy } = this.data;
-    if (!lazy) {
-      this.create();
+    if (lazy) {
+      return;
     }
+    // Give other components some time to register event listeners
+    setImmediate(() => {
+      this.create();
+    });
   },
   remove() {
     this.destroy();

@@ -41,7 +41,7 @@ exports.typeSet = {
       sectionNames.push(...Object.keys(value));
       sectionNames.push('EOS');
       return this.baseWrite(sectionNames.map(name =>
-        Object.assign(value[name], {
+        Object.assign(value[name] || {}, {
           name: `[${name}]`,
         })
       ));
@@ -75,9 +75,11 @@ exports.typeSet = {
     scenePath: 'DynamicString',
     texturePath: 'DynamicString',
     _unknownColor: 'FloatColor',
+    // Seems to be some position + rotation
     _unknownVector1: 'Vector3',
     _unknownVector2: 'Vector3',
     _unknownBytes: ['array', 'uint8', 4],
+    // 0...3
     _flag: 'uint8',
   }, ['if', '_flag', {
     _unknownOptionalBytes: ['array', 'uint8', 4],
@@ -90,14 +92,16 @@ exports.typeSet = {
       id: 'uint32',
       type: ['enum', 'uint32', LightTypes],
       color: 'FloatColor',
-      param: 'uint32',
+      // [ 1, 3, 2 ]
+      _unknownInt: 'uint32',
     }, ['if', context => context.type === 'UnknownLight1', {
       _unknownVectors: ['array', 'Vector3', 2],
     }], ['if', context => context.type === 'UnknownLight128', {
+      // [ 8, 3, 10, 17, 6, 7, 5, 11, 2, 9, 1, 30 ]
       _unknownFloat: 'float32',
       _unknownVector: 'Vector3',
     }], ['if', context => context.type === 'UnknownLight129', {
-      _unknownInt: 'uint32',
+      _unknownInt1: 'uint32',
       _unknownVectors: ['array', 'Vector3', 2],
     }]]],
   },
@@ -107,12 +111,17 @@ exports.typeSet = {
       fileName: 'DynamicString',
       position: 'Vector3',
       rotation: 'Vector3',
+      // [ 0...5000, 8...5000 ]
       _unknownFloats: ['array', 'float32', 2],
       scale: 'Vector3',
       _unknownColor: 'IntColor',
+      // [ '0,0', '1,0', '2,0', '0,1', '1,1', '2,1' ]
       _unknownFlags: ['array', 'uint8', 2],
+      // [ 1, 0, 9, 3, 6, 2, 7, 10, 8, 11, 4 ]
       _unknownInt1: 'uint32',
+      // [ 0, 1 ]
       _unknownFlag: 'uint8',
+      // [ 0, -1, 4, 2, 1, 3 ]
       _unknownInt2: 'int32',
     }],
   },
@@ -124,8 +133,11 @@ exports.typeSet = {
       rotation: 'Vector3',
       scale: 'Vector3',
       _unknownColor: 'IntColor',
-      _unknownFlag1: 'uint8',
+      // Always 0
+      _unknownFlag: 'uint8',
+      // [ -1, 0, 1, 4, 2, 3 ]
       _unknownInt: 'int32',
+      // [ 0, 1 ]
       _unknownFlag2: 'uint8',
     }],
   },
@@ -152,20 +164,22 @@ exports.typeSet = {
     triggers: ['DynamicArray', ['extend', {
       id: 'uint32',
       type: ['enum', 'uint32', TriggerTypes],
+      // [ 0, 1 ]
       _unknownFlag: 'uint32',
-      _unknownVector: 'Vector3',
-      _unknownInts: ['array', 'uint32', 5],
-      _unknownString: 'DynamicString',
-    }, ['if', context => context.type === 'UnknownTrigger0', {
-      position: 'Vector3',
       rotation: 'Vector3',
+      // 0...55
+      kind: 'uint32',
+      params: ['array', 'uint32', 4],
+      // [ '', '*' ]
+      _unknownString: 'DynamicString',
+      position: 'Vector3',
+    }, ['if', context => context.type === 'UnknownTrigger0', {
+      target: 'Vector3',
     }], ['if', context => context.type === 'UnknownTrigger1', {
-      position: 'Vector3',
       radius: 'float32',
-    }], ['if', context => context.type === 'UnknownTrigger2', {
-      position: 'Vector3',
     }]]],
   },
+  // Always empty
   '2DSamples_v2Data': {
     samples: ['DynamicArray', {
       id: 'uint32',
@@ -178,7 +192,8 @@ exports.typeSet = {
     samples: ['DynamicArray', {
       id: 'uint32',
       fileName: 'DynamicString',
-      _unknownVectors: ['array', 'Vector3', 3],
+      position: 'Vector3',
+      _unknownVectors: ['array', 'Vector3', 2],
       _unknownInts: ['array', 'uint32', 5],
     }],
   },
@@ -233,17 +248,22 @@ exports.typeSet = {
     }]]],
   },
   AmbientSoundData: {
-    count: 'uint32',
+    // 0...17
+    _unknownValue: 'uint32',
   },
   MusicData: {
-    count: 'uint32',
+    // [ 0xCDCDCDCD, 0, 2 ]
+    _unknownValue: 'uint32',
   },
   SceneData: {
     _unknownItems: ['DynamicArray', {
+      // Maybe some comment string
       _unknownString: 'DynamicString',
+      // [ [ 0...499 ], [ 4, 10, 6, 5, 0, 2, 3, 8 ] ]
       _unknownInts: ['array', 'uint32', 2],
     }],
   },
+  // Always empty
   VertexModifiersData: {
     modifiers: ['DynamicArray', ['extend', {
       id: 'uint32',
@@ -259,12 +279,16 @@ exports.typeSet = {
   },
   BehavioursData: {
     behaviours: ['DynamicArray', {
+      // 900...2017
       type: 'uint32',
+      // 0...99
       modelId: 'uint32',
     }],
   },
   DatasetData: {
+    // 32 or 36 bytes length
     _unknownData: ['DynamicArray', 'uint8'],
+    // Both are always empty
     _unknownStrings: ['array', 'DynamicString', 2],
   },
   SceneOriginData: {
@@ -273,11 +297,13 @@ exports.typeSet = {
   TexturePropertiesData: {
     properties: ['DynamicArray', {
       fileName: 'DynamicString',
-      value: 'int32',
+      footstepSound: 'int32',
     }],
   },
   WaypointSystemData: ['extend', {
+    // [ 5, 6 ]
     version: 'uint32',
+    // Always 0
     empty: 'uint32',
   }, ['if', context => context.version >= 5, {
     _unknownData: ['array', 'uint8', 24],
@@ -298,6 +324,9 @@ exports.typeSet = {
     _reserved: ['const', 'uint32', 0xFFFF, true],
   }],
   BackdropData: {
+    // Some are backdrop model names, some - unique values:
+    // 1_Vortex 2_Forest 3_Horizon 5_Swamp 7_Mountain1 10_Garden 12_waterduel
+    // 15_DuelSwamp 16_Trainer 17_DuelSpecial 18_DuelLava 19_PreDuel
     fileName: 'DynamicString',
   },
   EOSData: {},

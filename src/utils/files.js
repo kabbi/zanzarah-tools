@@ -1,3 +1,6 @@
+const jBinary = require('jbinary');
+const FileSaver = require('file-saver');
+
 const ReadTypeMappings = {
   arraybuffer: 'readAsArrayBuffer',
   binary: 'readAsBinaryString',
@@ -26,3 +29,11 @@ exports.readFile = (file, type = 'text') => (
     reader[ReadTypeMappings[type]](file);
   })
 );
+
+exports.saveFile = (data, typeSet, fileName, mimeType) => {
+  const binary = new jBinary(JSON.stringify(data).length, typeSet);
+  const bytesWritten = binary.writeAll(data);
+  const buffer = binary.view.buffer.slice(0, bytesWritten);
+  const blob = new Blob([buffer], { type: mimeType });
+  FileSaver.saveAs(blob, fileName);
+};

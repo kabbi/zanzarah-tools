@@ -1,34 +1,38 @@
 import AFRAME from 'aframe/src';
 import size from 'lodash/size';
-// import debug from 'debug';
 
-import { bind } from '../utils/components';
-
-// const warn = debug('app:components:fs-gui:warn');
+import { bind, callLater } from '../utils/components';
 
 AFRAME.registerComponent('gui-main', {
   dependencies: ['gui'],
   init() {
-    this.gui = this.el.components.gui.root;
-    this.guiContext = {};
-
-    this.fsFolder = this.gui.addFolder('Files');
-    this.guiContext.clearScene = () => this.handleClearScene();
-    this.gui.add(this.guiContext, 'clearScene')
-      .name('Clear scene');
-
-    this.fileControls = [];
-    this.guiContext.helpMessage = 'Drop files here';
-    this.fsFolder.add(this.guiContext, 'helpMessage')
-      .name('Tip');
-
     this.fsEntity = document.querySelector('[fs]');
-    this.unbind = bind(this, 'handleFsUpdate', this.fsEntity, 'fs-updated');
+    this.unbind = callLater(
+      bind(this, 'handleFsUpdate', this.fsEntity, 'fs-updated'),
+      bind(this, 'handleGuiCreated', this.el, 'gui-created'),
+    );
   },
   remove() {
     this.gui.removeFolder(this.fsFolder);
     this.unbind();
   },
+
+  handleGuiCreated(event) {
+    const { detail: { gui } } = event;
+    this.guiContext = {};
+    this.gui = gui;
+
+    this.fsFolder = this.gui.addFolder('Files');
+    this.guiContext.clearScene = () => this.handleClearScene();
+    this.gui.add(this.guiContext, 'clearScene')
+      .name('Clear workspace');
+
+    this.fileControls = [];
+    this.guiContext.helpMessage = 'Drop files here';
+    this.fsFolder.add(this.guiContext, 'helpMessage')
+      .name('Tip');
+  },
+
   handleFileClick(fileName) {
     this.el.emit('file-selected', { fileName });
   },

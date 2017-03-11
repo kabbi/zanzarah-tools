@@ -13,7 +13,7 @@ AFRAME.registerComponent('z-light', {
     _unknownFloat: { type: 'number' },
   },
 
-  init() {
+  update() {
     const { object3D } = this.el;
     const { type } = this.data;
 

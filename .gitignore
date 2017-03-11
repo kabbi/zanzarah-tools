@@ -2,7 +2,6 @@
 vendor/zanzapack/zanzapack
 coverage
 build
-.env
 
 # Zanzarah parsed data files
 /editor/data/_fb*.fbs.json

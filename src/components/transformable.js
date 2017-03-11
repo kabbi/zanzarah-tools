@@ -38,6 +38,15 @@ AFRAME.registerComponent('transformable', {
     );
     this.controls.setMode(Modes[0]);
     this.controls.attach(this.el.object3D);
+    this.controls.addEventListener('objectChange', () => {
+      // Sync with components
+      const { object3D } = this.el;
+      this.el.setAttribute('position', object3D.position);
+      this.el.setAttribute('rotation', object3D.rotation.toArray()
+        .map(THREE.Math.radToDeg)
+        .join(' ')
+      );
+    });
     sceneEl.object3D.add(this.controls);
   },
   handleDestroyControls(event) {

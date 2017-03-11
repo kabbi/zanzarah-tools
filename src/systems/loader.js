@@ -119,7 +119,12 @@ AFRAME.registerSystem('loader', {
         };
 
         this.target.appendChild(
-          <a-entity position={offset.toArray().join(' ')}>
+          <a-entity
+            gui
+            gui-scene
+            z-scene={{ scene }}
+            position={offset.toArray().join(' ')}
+            >
             {SceneOrigin && (
               <a-entity
                 position={SceneOrigin.origin.join(' ')}
@@ -131,6 +136,7 @@ AFRAME.registerSystem('loader', {
             )}
             {Misc && (
               <a-entity
+                {...commonProps}
                 z-entity={{
                   type: 'world',
                   singleton: true,
@@ -145,7 +151,6 @@ AFRAME.registerSystem('loader', {
                 {...commonProps}
                 z-model={model}
                 z-entity={{
-                  id: model.id,
                   type: 'model_v3',
                 }}
                 />
@@ -155,7 +160,6 @@ AFRAME.registerSystem('loader', {
                 {...commonProps}
                 z-fo-model={model}
                 z-entity={{
-                  id: model.id,
                   type: 'fo_model_v4',
                 }}
                 />
@@ -165,7 +169,6 @@ AFRAME.registerSystem('loader', {
                 {...commonProps}
                 z-light={light}
                 z-entity={{
-                  id: light.id,
                   type: 'light',
                 }}
                 />
@@ -175,7 +178,6 @@ AFRAME.registerSystem('loader', {
                 {...commonProps}
                 z-trigger={trigger}
                 z-entity={{
-                  id: trigger.id,
                   type: 'trigger',
                 }}
                 />

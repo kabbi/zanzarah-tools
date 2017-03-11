@@ -26,10 +26,18 @@ document.getElementById('root').replaceWith(
       />
     <a-entity
       fs
-      fs-dragndrop
-      fs-xhr={`path: ${getRootPath()}`}
+      fs-dragndrop={{ openOnDrop: true }}
+      fs-xhr={{ path: getRootPath() }}
       />
 
-    <a-entity id="target"/>
+    <a-entity id="target">
+      <a-box
+        selectable
+        transformable
+        gui={{ lazy: true }}
+        gui-opener={{ event: 'click' }}
+        gui-entity-editor={{ exclude: 'gui.*' }}
+        />
+    </a-entity>
   </a-scene>
 );
