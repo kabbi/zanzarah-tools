@@ -7,26 +7,86 @@ const { typeSet } = require('../src/parsers/renderware');
 
 const args = yargs
   .usage('Usage: $0 [options]')
-  .boolean('status-only')
   .demandCommand(1, 'You must specify the file to parse')
-  .describe('status-only', 'Output only parsing status, success or fail')
+  .describe('t', 'Select the output type you want this script to produce')
+  .choices('t', ['json', 'status', 'hierarchy', 'debug-atomic', 'debug-geometry'])
+  .alias('t', 'output-type')
+  .default('t', 'json')
   .help()
   .argv;
+
+const traverse = (sections, cb, level = 0) => {
+  for (const section of sections) {
+    const { children } = section;
+    if (cb(section, level)) {
+      continue;
+    }
+    if (children) {
+      traverse(children, cb, level + 1);
+    }
+  }
+};
 
 const [ fileName ] = args._;
 jBinary.load(fileName, typeSet)
   .then(binary => {
     const data = binary.readAll();
-    if (args.statusOnly) {
-      console.log('OK', fileName);
-    } else {
-      console.log(JSON.stringify(data, null, 2));
+    switch (args.outputType) {
+      case 'json':
+        console.log(JSON.stringify(data, null, 2));
+        break;
+      case 'status':
+        console.log('OK', fileName);
+        break;
+      case 'hierarchy': {
+        const IgnoredTypes = ['RwData', 'RwString'];
+        traverse(data, (section, level) => {
+          if (IgnoredTypes.includes(section.type)) {
+            return true;
+          }
+          if (section.type === 'RwExtension' && section.children.length === 0) {
+            return true;
+          }
+          console.log(`${' '.repeat(level * 2)}${section.type}`);
+          return false;
+        });
+        break;
+      }
+      case 'debug-atomic': {
+        let atomicCount = 0;
+        let lastInfo = '';
+        traverse(data, section => {
+          if (section.type !== 'RwAtomic') {
+            return false;
+          }
+          const { data } = section.children[0];
+          lastInfo = `${data.frameIndex},${data.geometryIndex}`;
+          atomicCount++;
+          return true;
+        });
+        console.log(atomicCount, lastInfo);
+        break;
+      }
+      case 'debug-geometry': {
+        let geometryCount = 0;
+        traverse(data, section => {
+          if (section.type !== 'RwGeometry') {
+            return false;
+          }
+          geometryCount++;
+          return true;
+        });
+        console.log(geometryCount);
+        break;
+      }
+      default:
+        console.error('Unsupported output type');
     }
   })
   .catch(err => {
-    if (args.statusOnly) {
+    if (args.outputType === 'status') {
       console.log('FAILED', fileName);
-    } else {
-      console.error('Fatal error, cannot continue:', err);
+      return;
     }
+    console.error('Fatal error, cannot continue:', err);
   });

@@ -7,6 +7,7 @@ const {
   ChildChunk,
   DumpContext,
   DynamicArray,
+  DynamicString,
   BitFlags,
 } = require('../utils/jbinary');
 
@@ -73,6 +74,7 @@ exports.typeSet = {
   ChildChunk,
   DumpContext,
   DynamicArray,
+  DynamicString,
 
   SectionHeader: {
     type: ['enum', 'uint32', SectionTypes],
@@ -279,6 +281,23 @@ exports.typeSet = {
     faceCount: 'uint32',
     splits: ['array', 'MaterialSplit', 'splitCount'],
   },
+  'RwFrameList->RwExtension->RwAnimPlugin': ['extend', {
+    boneId: 'int32',
+    _unknownFlag: 'uint32',
+  }, ['if', '_unknownFlag', {
+    _unknown: 'uint32',
+    _unknownCount1: 'uint32',
+    _unknownCount2: 'uint32',
+    _uknownItems1: ['array', 'AnimationData', '_unknownCount1'],
+    _uknownItems2: ['array', 'AnimationData', '_unknownCount2'],
+  }]],
+  'RwAtomic->RwExtension->RwSkinPlugin': {
+    boneCount: 'uint32',
+    vertexCount: 'uint32',
+    boneIndices: ['array', ['array', 'uint8', 4], 'vertexCount'],
+    boneWeights: ['array', ['array', 'float32', 4], 'vertexCount'],
+    bones: ['array', 'Bone', 'boneCount'],
+  },
 
   // Generic types
   Color: ['Hex', 'uint32', 8],
@@ -297,8 +316,40 @@ exports.typeSet = {
     _unknown: 'uint32',
   },
   MaterialSplit: {
-    count: 'uint32', // in other sources - faceIndex
+    count: 'uint32', // In other sources - faceIndex
     materialIndex: 'uint32',
     indices: ['array', 'uint32', 'count'],
   },
+  Bone: {
+    id: 'uint32',
+    index: 'uint32',
+    _unknown3: 'uint32',
+    inverseBindMatrix: 'InverseBindMatrix',
+  },
+  InverseBindMatrix: {
+    right: 'Vector3',
+    flags: 'uint32',
+    up: 'Vector3',
+    _padding1: 'uint32',
+    at: 'Vector3',
+    _padding2: 'uint32',
+    pos: 'Vector3',
+    _padding3: 'uint32',
+  },
+  AnimationData: ['extend', {
+    name: 'DynamicString',
+    type: 'uint32',
+    _unknownCount1: 'uint32',
+    _unknownCount2: 'uint32',
+  }, ['if', context => context.type === 1, {
+    _unknownItems1: ['array', ['array', 'float32', 3], '_unknownCount1'],
+  }], ['if', context => context.type === 2, {
+    _unknownItems1: ['array', ['array', 'float32', 4], '_unknownCount1'],
+  }], {
+    _unknownItems2: ['array', {
+      _unknown1: 'uint32',
+      _unknown2: 'uint32',
+      _unknown3: 'float32',
+    }, '_unknownCount2'],
+  }],
 };

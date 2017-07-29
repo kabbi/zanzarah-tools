@@ -1,0 +1,360 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const { basename } = require('path');
+const jBinary = require('jbinary');
+const { quat, mat4 } = require('gl-matrix');
+const debug = require('debug');
+const yargs = require('yargs');
+
+const { typeSet: dffTypes } = require('../src/parsers/renderware');
+const { typeSet: skaTypes } = require('../src/parsers/zanzarah-animation');
+const { bmp2png, mergeColorWithAlpha } = require('../src/utils/textures');
+const {
+  AccessorComponentTypes,
+  AccessorTypes,
+  GLTFBuilder,
+} = require('../src/utils/gltf');
+
+const log = debug('scripts:dff2gltf');
+const fatal = (...args) => {
+  console.error(...args);
+  process.exit(1);
+};
+
+const args = yargs
+  .usage('Usage: $0 <input.dff> [options]')
+  .demandCommand(1, 'You must specify input file')
+  .describe('texture-path', 'Path to look for texture images')
+  .describe('animation', 'Add the specified animation, should be .ska file. You can set add this multiple times')
+  .describe('ignore-colors', 'Don\'t convert vertex colors, use this if your model seems black')
+  .describe('output', 'Write the resulting gltf data to the file')
+  .default('animation', [])
+  .array('animation')
+  .help()
+  .argv;
+
+const convertDffToGltf = dffData => {
+  // Resulting gltf data builder
+  const gltf = new GLTFBuilder('dff2gltf');
+  const sceneIndex = gltf.addDefaultScene({
+    nodes: [],
+  });
+
+  // Converter state
+  const gltfNodeIndexByBoneId = {};
+  let skinIndex = null;
+  let meshIndex = null;
+
+  const handlers = {
+    /**
+     * Sometimes zanzarah models contain geometry as a child in RwAtomic, so we
+     * need to wait for exit from this section to assign meshes. By the time this
+     * is called, we must have already been parsed all geometries and materials.
+     */
+    RwAtomicExit(section) {
+      const { frameIndex, geometryIndex } = section.children[0].data;
+      log('Converting atomic section');
+
+      const ZanzarahEmbeddedGeometryIndex = 5;
+      gltf.getEntity('scenes', sceneIndex).nodes.push(frameIndex);
+      let meshIndex = geometryIndex;
+      if (meshIndex === ZanzarahEmbeddedGeometryIndex) {
+        log('Fixing RwAtomic geometry index as it points to embedded geometry');
+        meshIndex = 0;
+      }
+      const gltfNode = gltf.getEntity('nodes', frameIndex);
+      if (!gltfNode) {
+        fatal('Atomic section specified non-existing frame as it\'s root:', frameIndex);
+      }
+      if (!gltf.getEntity('meshes', meshIndex)) {
+        fatal('Atomic section specified non-existing geometry as it\'s root:', geometryIndex);
+      }
+      gltfNode.mesh = meshIndex;
+      if (skinIndex !== null) {
+        gltfNode.skin = skinIndex;
+      }
+    },
+    RwFrameList(section) {
+      const { frames } = section.children[0].data;
+      const extensions = section.children.slice(1).map(s => s.children);
+      log('Converting frame list section with %d frames', frames.length);
+
+      for (let i = 0; i < frames.length; i++) {
+        const frame = frames[i];
+        const matrix = [
+          // Column-major order
+          frame.transform[0], frame.transform[1], frame.transform[2], 0,
+          frame.transform[3], frame.transform[4], frame.transform[5], 0,
+          frame.transform[6], frame.transform[7], frame.transform[8], 0,
+          frame.offset[0], frame.offset[1], frame.offset[2], 1,
+        ];
+        const translation = new Array(3);
+        const rotation = new Array(4);
+        const scale = new Array(3);
+        mat4.getTranslation(translation, matrix);
+        mat4.getRotation(rotation, matrix);
+        mat4.getScaling(scale, matrix);
+        quat.normalize(rotation, rotation);
+        const gltfNodeIndex = gltf.addNode({
+          translation,
+          rotation,
+          scale,
+        });
+        const gltfParentNode = gltf.getEntity('nodes', frame.parentFrame);
+        if (frame.parentFrame !== -1 && gltfParentNode) {
+          gltfParentNode.children = gltfParentNode.children || [];
+          gltfParentNode.children.push(gltfNodeIndex);
+        }
+        const animExtension = extensions[i].find(s => s.type === 'RwAnimPlugin');
+        if (animExtension) {
+          const { boneId } = animExtension.data;
+          gltfNodeIndexByBoneId[boneId] = gltfNodeIndex;
+        }
+      }
+    },
+    RwGeometry(section) {
+      const { data } = section.children[0];
+      log('Converting geometry section with %d vertices', data.vertexCount);
+      const commonAttributes = {};
+      const gltfMesh = {
+        primitives: [],
+      };
+
+      commonAttributes.POSITION = gltf.addAttributes(data.vertices, {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Vector3D,
+      });
+
+      if (data.normals) {
+        commonAttributes.NORMAL = gltf.addAttributes(data.normals, {
+          componentType: AccessorComponentTypes.Float,
+          type: AccessorTypes.Vector3D,
+        });
+      }
+
+      if (data.textureCoords) {
+        commonAttributes.TEXCOORD_0 = gltf.addAttributes(data.textureCoords, {
+          componentType: AccessorComponentTypes.Float,
+          type: AccessorTypes.Vector2D,
+        });
+      }
+
+      if (data.vertexColors && !args.ignoreColors) {
+        commonAttributes.COLOR_0 = gltf.addAttributes(data.vertexColors.map(color => [
+          parseInt(color.slice(2, 4), 16),
+          parseInt(color.slice(4, 6), 16),
+          parseInt(color.slice(6, 8), 16),
+        ].map(v => Math.floor(v / 100))), {
+          componentType: AccessorComponentTypes.UnsignedByte,
+          type: AccessorTypes.Vector3D,
+          normalized: true,
+        });
+      }
+
+      let materialCount = 0;
+      for (const triangle of data.indices) {
+        const materialIndex = triangle[2];
+        materialCount = Math.max(materialCount, materialIndex + 1);
+      }
+
+      for (let i = 0; i < materialCount; i++) {
+        gltfMesh.primitives.push({
+          material: i,
+          attributes: commonAttributes,
+          indices: gltf.addAttributes(data.indices.reduce((result, [ b, a, materialIndex, c ]) => {
+            if (materialIndex !== i) {
+              return result;
+            }
+            result.push([a], [b], [c]);
+            return result;
+          }, []), {
+            componentType: AccessorComponentTypes.UnsignedShort,
+            type: AccessorTypes.Scalar,
+          }),
+        });
+      }
+
+      meshIndex = gltf.addMesh(gltfMesh);
+    },
+    RwMaterial(section) {
+      const { textureCount } = section.children[0].data;
+      log('Converting material section with %d textures', textureCount);
+      if (textureCount === 0) {
+        return true;
+      }
+
+      const texture = section.children[1];
+      const [ colorData, alphaData ] = texture.children
+        .filter(child => child.type === 'RwString')
+        .map(child => child.data)
+        .map(fileName => fileName && fs.readFileSync(
+          `${args.texturePath}/${fileName.toUpperCase()}.BMP`
+        ));
+
+      const image = alphaData ? mergeColorWithAlpha(colorData, alphaData) : bmp2png(colorData);
+
+      gltf.addMaterial({
+        alphaMode: alphaData ? 'MASK' : 'OPAQUE',
+        pbrMetallicRoughness: {
+          metallicFactor: 0,
+          baseColorTexture: {
+            index: {
+              source: {
+                uri: image,
+              },
+            },
+          },
+        },
+      });
+      return true;
+    },
+    RwSkinPlugin(section) {
+      const { bones, boneIndices, boneWeights } = section.data;
+      log('Found skin section with %d bones', bones.length);
+
+      const jointsAccessor = gltf.addAttributes(boneIndices, {
+        componentType: AccessorComponentTypes.UnsignedByte,
+        type: AccessorTypes.Vector4D,
+      });
+      const weightsAccessor = gltf.addAttributes(boneWeights, {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Vector4D,
+      });
+
+      const { primitives } = gltf.getEntity('meshes', meshIndex);
+      for (const primitive of primitives) {
+        primitive.attributes.JOINTS_0 = jointsAccessor;
+        primitive.attributes.WEIGHTS_0 = weightsAccessor;
+      }
+
+      const matricesAccessor = gltf.addAttributes(bones.map(({ inverseBindMatrix }) => [
+        // Column-major order
+        ...inverseBindMatrix.right, 0,
+        ...inverseBindMatrix.up, 0,
+        ...inverseBindMatrix.at, 0,
+        ...inverseBindMatrix.pos, 1,
+      ]), {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Matrix4D,
+      });
+
+      skinIndex = gltf.addSkin({
+        joints: bones.map(bone => gltfNodeIndexByBoneId[bone.id]),
+        inverseBindMatrices: matricesAccessor,
+      });
+    },
+  };
+
+  const traverse = sections => {
+    for (const section of sections) {
+      const { type, children } = section;
+      if (handlers[type] && handlers[type](section)) {
+        continue;
+      }
+      if (children) {
+        traverse(children);
+      }
+      const exitHandler = handlers[`${type}Exit`];
+      if (exitHandler) {
+        exitHandler(section);
+      }
+    }
+  };
+
+  log('Parsing dff file sections');
+  traverse(dffData);
+
+  for (const animation of args.animation) {
+    log('Adding animation from %s', animation);
+
+    // All non-parent indexes in ska animations are pre-multiplied by 36 (??)
+    const MagicKeyFrameIndexConstant = 36;
+    const { keyFrames, duration } = new jBinary(fs.readFileSync(animation), skaTypes)
+      .readAll();
+
+    log('Parsed %d keyframes with total duration of %ds', keyFrames.length, duration);
+    const { joints } = gltf.getEntity('skins', skinIndex);
+    const boneCount = joints.length;
+
+    const keyFramesByBoneIndex = {};
+    const boneIndexByKeyFrameIndex = {};
+    for (let keyFrameIndex = 0; keyFrameIndex < keyFrames.length; keyFrameIndex++) {
+      const keyFrame = keyFrames[keyFrameIndex];
+      if (keyFrameIndex < boneCount) {
+        // First 'boneCount' keyframes are always first frames for corresponding bones
+        boneIndexByKeyFrameIndex[keyFrameIndex] = keyFrameIndex;
+        keyFramesByBoneIndex[keyFrameIndex] = [keyFrame];
+      } else {
+        const parentKeyFrameIndex = keyFrame.parent / MagicKeyFrameIndexConstant;
+        const boneIndex = boneIndexByKeyFrameIndex[parentKeyFrameIndex];
+        boneIndexByKeyFrameIndex[keyFrameIndex] = boneIndex;
+        keyFramesByBoneIndex[boneIndex].push(keyFrame);
+      }
+    }
+
+    for (let boneIndex = 0; boneIndex < boneCount; boneIndex++) {
+      const boneKeyFrames = keyFramesByBoneIndex[boneIndex];
+      const timeStops = gltf.addAttributes(boneKeyFrames.map(({ time }) => [time]), {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Scalar,
+      });
+      const positionValues = gltf.addAttributes(boneKeyFrames.map(({ position }) => position), {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Vector3D,
+      });
+      const rotationValues = gltf.addAttributes(boneKeyFrames.map(({ rotation }) => {
+        const q = quat.create();
+        quat.invert(q, rotation);
+        return Array.from(q);
+      }), {
+        componentType: AccessorComponentTypes.Float,
+        type: AccessorTypes.Vector4D,
+      });
+
+      gltf.addAnimation({
+        channels: [{
+          sampler: 0,
+          target: {
+            node: joints[boneIndex],
+            path: 'translation',
+          },
+        }, {
+          sampler: 1,
+          target: {
+            node: joints[boneIndex],
+            path: 'rotation',
+          },
+        }],
+        samplers: [{
+          input: timeStops,
+          output: positionValues,
+        }, {
+          input: timeStops,
+          output: rotationValues,
+        }],
+        name: basename(animation),
+      });
+    }
+  }
+
+  log('Writing the final gltf file');
+  const data = gltf.build();
+  if (args.output) {
+    fs.writeFileSync(args.output, data);
+  } else {
+    process.stdout.write(data);
+  }
+
+  log('Done');
+};
+
+const [ dffFile ] = args._;
+jBinary.load(dffFile, dffTypes)
+  .then(binary => {
+    const data = binary.readAll();
+    convertDffToGltf(data);
+  })
+  .catch(err => {
+    console.error('Fatal error, cannot continue:', err);
+  });

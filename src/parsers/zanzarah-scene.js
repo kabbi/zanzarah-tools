@@ -131,6 +131,7 @@ exports.typeSet = {
       fileName: 'DynamicString',
       position: 'Vector3',
       rotation: 'Vector3',
+      // May not be really scale
       scale: 'Vector3',
       _unknownColor: 'IntColor',
       // Always 0

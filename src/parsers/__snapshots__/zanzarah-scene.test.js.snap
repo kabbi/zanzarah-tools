@@ -7,7 +7,7 @@ Object {
     "samples": Array [],
   },
   "AmbientSound": Object {
-    "count": 0,
+    "_unknownValue": 0,
   },
   "Backdrop": Object {
     "fileName": "5_Swamp",
@@ -151,7 +151,7 @@ Object {
     "models": Array [
       Object {
         "_unknownColor": "ff868686",
-        "_unknownFlag1": 0,
+        "_unknownFlag": 0,
         "_unknownFlag2": 0,
         "_unknownInt": -1,
         "fileName": "ido01h",
@@ -174,7 +174,7 @@ Object {
       },
       Object {
         "_unknownColor": "ffffffff",
-        "_unknownFlag1": 0,
+        "_unknownFlag": 0,
         "_unknownFlag2": 1,
         "_unknownInt": -1,
         "fileName": "ifl03h",
@@ -198,7 +198,7 @@ Object {
     ],
   },
   "Music": Object {
-    "count": 3452816845,
+    "_unknownValue": 3452816845,
   },
   "Scene": Object {
     "_unknownItems": Array [
@@ -292,35 +292,35 @@ Object {
     "properties": Array [
       Object {
         "fileName": "default",
-        "value": -2,
+        "footstepSound": -2,
       },
       Object {
         "fileName": "ifl00th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "ifl03th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "xsp01th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "xsp04th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "xsp06th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "xwo00th",
-        "value": 14,
+        "footstepSound": 14,
       },
       Object {
         "fileName": "xwo09th",
-        "value": 14,
+        "footstepSound": 14,
       },
     ],
   },
@@ -328,186 +328,186 @@ Object {
     "triggers": Array [
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          0,
+        "_unknownString": "",
+        "id": 15,
+        "kind": 0,
+        "params": Array [
           13,
           13,
           1243,
           0,
         ],
-        "_unknownString": "",
-        "_unknownVector": Array [
-          0.7591406106948853,
-          -0.05777226760983467,
-          -0.648405909538269,
-        ],
-        "id": 15,
         "position": Array [
           10.371908187866211,
           31.653139114379883,
           17.129343032836914,
         ],
         "radius": 1.149999976158142,
+        "rotation": Array [
+          0.7591406106948853,
+          -0.05777226760983467,
+          -0.648405909538269,
+        ],
         "type": "UnknownTrigger1",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          1,
-          0,
-          0,
-          0,
-          0,
-        ],
         "_unknownString": "",
-        "_unknownVector": Array [
-          -0.17345939576625824,
-          -0.1488700956106186,
-          -0.9735873341560364,
-        ],
         "id": 16,
+        "kind": 1,
+        "params": Array [
+          0,
+          0,
+          0,
+          0,
+        ],
         "position": Array [
           11.955608367919922,
           30.400392532348633,
           15.556184768676758,
         ],
+        "rotation": Array [
+          -0.17345939576625824,
+          -0.1488700956106186,
+          -0.9735873341560364,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          3,
+        "_unknownString": "",
+        "id": 17,
+        "kind": 3,
+        "params": Array [
           2207288756,
           0,
           0,
           0,
         ],
-        "_unknownString": "",
-        "_unknownVector": Array [
-          -0.745530366897583,
-          -0.5600088834762573,
-          -0.3613913953304291,
-        ],
-        "id": 17,
         "position": Array [
           13.085081100463867,
           30.560749053955078,
           13.454812049865723,
         ],
+        "rotation": Array [
+          -0.745530366897583,
+          -0.5600088834762573,
+          -0.3613913953304291,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          5,
+        "_unknownString": "",
+        "id": 19,
+        "kind": 5,
+        "params": Array [
           1,
           2,
           0,
           0,
         ],
-        "_unknownString": "",
-        "_unknownVector": Array [
-          -0.1186022087931633,
-          -0.9817796945571899,
-          -0.14863041043281555,
-        ],
-        "id": 19,
         "position": Array [
           12.872611999511719,
           30.1561279296875,
           13.440271377563477,
         ],
+        "rotation": Array [
+          -0.1186022087931633,
+          -0.9817796945571899,
+          -0.14863041043281555,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          5,
-          2,
-          2,
-          0,
-          0,
-        ],
         "_unknownString": "",
-        "_unknownVector": Array [
-          0.8578603267669678,
-          -0.47725433111190796,
-          0.19066941738128662,
-        ],
         "id": 22,
+        "kind": 5,
+        "params": Array [
+          2,
+          2,
+          0,
+          0,
+        ],
         "position": Array [
           14.100581169128418,
           30.1541805267334,
           15.156375885009766,
         ],
+        "rotation": Array [
+          0.8578603267669678,
+          -0.47725433111190796,
+          0.19066941738128662,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          3,
+        "_unknownString": "",
+        "id": 23,
+        "kind": 3,
+        "params": Array [
           1567274756,
           0,
           0,
           0,
         ],
-        "_unknownString": "",
-        "_unknownVector": Array [
-          -0.846588671207428,
-          -0.40055859088897705,
-          0.350474089384079,
-        ],
-        "id": 23,
         "position": Array [
           16.19293785095215,
           30.24066162109375,
           11.976113319396973,
         ],
+        "rotation": Array [
+          -0.846588671207428,
+          -0.40055859088897705,
+          0.350474089384079,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          5,
-          0,
-          0,
-          0,
-          0,
-        ],
         "_unknownString": "",
-        "_unknownVector": Array [
-          -0.24567367136478424,
-          -0.9686687588691711,
-          -0.03636462613940239,
-        ],
         "id": 24,
+        "kind": 5,
+        "params": Array [
+          0,
+          0,
+          0,
+          0,
+        ],
         "position": Array [
           13.876931190490723,
           30.25874137878418,
           13.780603408813477,
         ],
+        "rotation": Array [
+          -0.24567367136478424,
+          -0.9686687588691711,
+          -0.03636462613940239,
+        ],
         "type": "UnknownTrigger2",
       },
       Object {
         "_unknownFlag": 0,
-        "_unknownInts": Array [
-          5,
+        "_unknownString": "",
+        "id": 25,
+        "kind": 5,
+        "params": Array [
           3,
           2,
           0,
           0,
         ],
-        "_unknownString": "",
-        "_unknownVector": Array [
-          -0.09985959529876709,
-          -0.9138188362121582,
-          0.39349132776260376,
-        ],
-        "id": 25,
         "position": Array [
           13.260506629943848,
           30.234582901000977,
           14.429807662963867,
+        ],
+        "rotation": Array [
+          -0.09985959529876709,
+          -0.9138188362121582,
+          0.39349132776260376,
         ],
         "type": "UnknownTrigger2",
       },

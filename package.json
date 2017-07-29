@@ -8,21 +8,31 @@
   },
   "dependencies": {
     "JSONStream": "^1.3.0",
+    "base64-js": "^1.2.1",
     "bl": "^1.2.0",
+    "bmp-js": "0.0.3",
     "concurrently": "^3.1.0",
     "debug": "^2.6.0",
+    "gl-matrix": "^2.4.0",
     "glob": "^7.1.1",
     "iconv": "^2.1.6",
     "jbinary": "kabbi/jBinary",
+    "jdataview": "^2.5.0",
+    "jpeg-js": "^0.3.3",
     "jszip": "^3.1.3",
     "lodash": "^4.17.4",
     "node-uuid": "^1.4.3",
+    "pngjs": "^3.2.0",
     "rufus": "^0.5.7",
     "yargs": "^6.6.0"
   },
   "devDependencies": {
     "aframe": "^0.5.0",
     "babel-eslint": "^7.1.1",
+    "bootswatch": "^3.3.7",
+    "bottleneck": "^1.15.1",
+    "browserfs": "^1.2.0",
+    "classnames": "^2.2.5",
     "cors": "^2.8.1",
     "dat.gui": "^0.6.1",
     "es6-promisify-all": "^0.1.0",
@@ -30,12 +40,22 @@
     "eslint-plugin-react": "^6.9.0",
     "express": "^4.14.0",
     "file-saver": "^1.3.3",
+    "history": "^4.6.1",
+    "qhistory": "^1.0.0",
+    "qs": "^6.4.0",
     "react": "^15.4.2",
+    "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
+    "react-icons": "^2.2.3",
+    "react-router": "^4.0.0",
+    "react-router-dom": "^4.0.0",
     "react-scripts": "^0.8.4",
+    "react-virtualized": "^9.3.0",
     "resolve-path": "^1.3.3",
+    "shortid": "^2.2.8",
+    "styled-components": "^1.4.4",
     "text-encoding": "^0.6.4",
-    "xo": "^0.17.1"
+    "xo": "^0.18.2"
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"node src/server/static.js\"",
@@ -54,12 +74,27 @@
   ],
   "author": "kabbi",
   "license": "MIT",
+  "moduleRoots": [
+    "src"
+  ],
   "xo": {
     "space": true,
     "parser": "babel-eslint",
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "moduleDirectory": [
+            "node_modules",
+            "src"
+          ]
+        }
+      }
+    },
     "rules": {
       "import/no-unassigned-import": "off",
       "unicorn/filename-case": "off",
+      "react/forbid-component-props": "off",
+      "react/jsx-no-bind": "off",
       "react/jsx-key": "off",
       "comma-dangle": [
         "error",

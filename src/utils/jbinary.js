@@ -73,7 +73,8 @@ exports.DynamicString = jBinary.Template({
     };
   },
   read() {
-    return this.baseRead().str;
+    const { str } = this.baseRead();
+    return str.replace(/\u0000+$/, '');
   },
   write(str) {
     this.baseWrite({
