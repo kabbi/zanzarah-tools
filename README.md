@@ -3,6 +3,10 @@ Zanzarah tools
 
 This repo contains all my Zanzarah editing and browsing tools. It came out from the effort to reverse-engineer the wonderful game: **Zanzarah - the Hidden Portal**, to provide all the tools for community to make various mods, modify the world and to enhance this pretty old game.
 
+New Web Version | Old Standalone App
+--- | ---
+<img src="docs/screenshots/Screen Shot 2017-03-10 at 9.15.16 PM.png" alt="An old node-webgl standalone version" width="400"> | <img src="docs/screenshots/Screen Shot 2015-04-26 at 12.18.10 AM.png" alt="New web-based editor" width="400">
+
 ### Work In progress
 
 I've actually started refactoring all my last tools, written in coffee-script, dissolve for parsing and node-webgl for ui with the modern stack - node v7 and es6, jBinary for parsing, and react/aframe based webapp for editing and visualization tools. This transition is currently undergoing, and I'm gradually removing the old tools and files. Right now, everything in `/src` is the new toolset, and you can already use something like
