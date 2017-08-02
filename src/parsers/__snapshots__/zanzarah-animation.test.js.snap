@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`parsers - zanzarah animation parses smallest known files 1`] = `
 Object {
   "duration": 6.066666603088379,

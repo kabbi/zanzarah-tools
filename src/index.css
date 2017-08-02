@@ -13,3 +13,8 @@ html, body, #root {
 #root > a-scene {
   position: static;
 }
+
+/* Fixup strange bootstrap styles */
+a.thumbnail:hover {
+  text-decoration: none;
+}

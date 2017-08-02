@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`parsers - zanzarah scene parses smallest known files 1`] = `
 Object {
   "2DSamples_v2": Object {
@@ -144,8 +146,8 @@ Object {
       0.4558423161506653,
     ],
     "sceneFile": "sc_3253",
-    "scenePath": "..\\Resources\\Worlds\\",
-    "texturePath": "..\\Resources\\Textures\\Worlds\\",
+    "scenePath": "..\\\\Resources\\\\Worlds\\\\",
+    "texturePath": "..\\\\Resources\\\\Textures\\\\Worlds\\\\",
   },
   "Models_v3": Object {
     "models": Array [

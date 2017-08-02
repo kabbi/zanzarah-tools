@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <title>Zanzarah Tools</title>
+    <script>
+      // Silence aframe placement warning, we are too cool for this shit
+      // (we can't alter cra script tag placement, so aframe will always be at bottom)
+      window.debug = 'no-aframe-warnings';
+    </script>
   </head>
   <body>
     <div id="root"></div>

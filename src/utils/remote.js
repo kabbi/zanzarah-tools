@@ -1,5 +1,5 @@
 const path = require('path');
-const keyBy = require('lodash/keyBy');
+const has = require('lodash/has');
 
 const { CommonPaths, getRootPath } = require('./paths');
 
@@ -31,6 +31,7 @@ exports.filterFiles = (files, category, ext) => {
   ));
 };
 
+// >TODO: Rethink texture resolving
 exports.resolveTexturePath = (modelPath, fileName) => {
   let modelDirName = path.basename(
     path.dirname(modelPath)
@@ -40,8 +41,7 @@ exports.resolveTexturePath = (modelPath, fileName) => {
     modelDirName = 'MODELS';
   }
 
-  return exports.fetchIndex().then(files => {
-    const existsIndex = keyBy(files);
+  return exports.fetchIndex().then(index => {
     const filesToTry = [
       [CommonPaths.Textures, modelDirName, fileName],
       [CommonPaths.WorldTextures, fileName],
@@ -52,7 +52,7 @@ exports.resolveTexturePath = (modelPath, fileName) => {
       path.join(...parts)
     ));
     for (const file of filesToTry) {
-      if (existsIndex[file]) {
+      if (has(index, file.split('/'))) {
         return file;
       }
     }

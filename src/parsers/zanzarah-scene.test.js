@@ -16,10 +16,10 @@ describe('parsers - zanzarah scene', () => {
   it('exports typeSet to parse', () => {
     expect(typeSet).toBeDefined();
   });
-  pit('parses empty file', async () => {
+  it('parses empty file', async () => {
     expect(await parse('./public/fixtures/empty.dff')).toEqual({});
   });
-  pit('parses smallest known files', async () => {
+  it('parses smallest known files', async () => {
     expect(await parse('./public/fixtures/smallest-scene.scn')).toMatchSnapshot();
   });
 });
