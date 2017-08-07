@@ -1,6 +1,7 @@
 Global:
   ☐ implement new command-line converters
     ✔ dff2obj converter @done(2017-01-25 00:16) @project(Global)
+    ✔ dff2gltf converter @done(2017-08-01 14:54) @project(Global)
     ☐ bsp2obj converter
 
 Renderware parser:
@@ -20,7 +21,7 @@ Refactoring:
     ☐ zanzarah config formats (scene, effect, actor descriptions, etc)
     ☐ effect files
     ☐ fbs db files
-    ☐ ska files
+    ✔ ska files @done(2017-08-01 14:53) @project(Refactoring)
 
 New editor:
   ☐ lazy dat.gui folders
@@ -29,3 +30,5 @@ New editor:
     ☐ allow loading any files from virtual fs
     ☐ manage virtual filesystems
     ☐ export current object
+  ☐ file browser
+    ☐ render previews of all model and texture files

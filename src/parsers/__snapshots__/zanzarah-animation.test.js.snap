@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`parsers - zanzarah animation parses smallest known files 1`] = `
 Object {
   "duration": 6.066666603088379,
@@ -5,7 +7,7 @@ Object {
   "keyFrameCount": 2,
   "keyFrames": Array [
     Object {
-      "parent": 4147921032,
+      "parent": -147046264,
       "position": Array [
         -3.5539347464919047e-8,
         1.5900786465294914e-8,
@@ -45,7 +47,7 @@ Object {
   "keyFrameCount": 28,
   "keyFrames": Array [
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         -4.55869508808604e-10,
         5.6764194039660154e-11,
@@ -60,7 +62,7 @@ Object {
       "time": 0,
     },
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         0.014641770161688328,
         -6.714202527291491e-8,
@@ -75,7 +77,7 @@ Object {
       "time": 0,
     },
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         -0.008825178258121014,
         0.0165800042450428,
@@ -90,7 +92,7 @@ Object {
       "time": 0,
     },
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         -0.37488803267478943,
         0.1454269289970398,
@@ -105,7 +107,7 @@ Object {
       "time": 0,
     },
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         0.008812627755105495,
         0.01658000238239765,
@@ -120,7 +122,7 @@ Object {
       "time": 0,
     },
     Object {
-      "parent": 4048534608,
+      "parent": -246432688,
       "position": Array [
         0.37597745656967163,
         0.1454269289970398,

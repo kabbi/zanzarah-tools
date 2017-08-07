@@ -5,12 +5,30 @@ import AFRAME, { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
+import { typeSet as actorTypeSet } from '../parsers/zanzarah-actor';
 import { typeSet as sceneTypeSet } from '../parsers/zanzarah-scene';
 import { bind } from '../utils/components';
 import { dom } from '../utils/dom';
 import { getRootPath } from '../utils/paths';
 
 const warn = debug('app:systems:loader:warn');
+
+const CommonComponents = {
+  selectable: true,
+  transformable: true,
+  'z-debug': true,
+  gui: {
+    lazy: true,
+    name: 'Selection',
+    target: '[gui-main]',
+  },
+  'gui-opener': {
+    state: 'selected',
+  },
+  'gui-entity-editor': {
+    include: 'z-.*',
+  },
+};
 
 AFRAME.registerSystem('loader', {
   schema: {},
@@ -43,7 +61,7 @@ AFRAME.registerSystem('loader', {
         obj-model={{ obj: fileName }}
         transformable
         selectable
-        />
+      />
     );
   },
   handleMTL(fileName) {
@@ -76,7 +94,7 @@ AFRAME.registerSystem('loader', {
         dff-model={{ dff: fileName }}
         transformable
         selectable
-        />
+      />
     );
   },
   handleBSP(fileName) {
@@ -84,11 +102,29 @@ AFRAME.registerSystem('loader', {
       <a-entity bsp-model={{ bsp: fileName }}/>
     );
   },
+  handleAED(fileName) {
+    const loader = new THREE.FileLoader();
+    loader.setPath(getRootPath());
+    loader.setResponseType('blob');
+    loader.load(fileName, blob => {
+      jBinary.load(blob, actorTypeSet).then(binary => {
+        const actor = binary.readAll();
+        this.target.appendChild(
+          <a-entity
+            {...CommonComponents}
+            z-actor={actor}
+          />
+        );
+      }).catch(err => {
+        warn('Error parsing actor: %o', err);
+      });
+    });
+  },
   handleSCN(fileName) {
-    const xhrLoader = new THREE.XHRLoader();
-    xhrLoader.setPath(getRootPath());
-    xhrLoader.setResponseType('blob');
-    xhrLoader.load(fileName, blob => {
+    const loader = new THREE.FileLoader();
+    loader.setPath(getRootPath());
+    loader.setResponseType('blob');
+    loader.load(fileName, blob => {
       jBinary.load(blob, sceneTypeSet).then(binary => {
         const scene = binary.readAll();
         const {
@@ -104,27 +140,16 @@ AFRAME.registerSystem('loader', {
           .fromArray(SceneOrigin.origin || [0, 0, 0])
           .multiplyScalar(-1);
 
-        const commonProps = {
-          selectable: true,
-          transformable: true,
-          gui: {
-            lazy: true,
-          },
-          'gui-opener': {
-            event: 'click',
-          },
-          'gui-entity-editor': {
-            include: 'z-.*',
-          },
-        };
-
         this.target.appendChild(
           <a-entity
-            gui
+            gui={{
+              target: '[gui-main]',
+              name: `Scene ${Misc.sceneFile}`,
+            }}
             gui-scene
             z-scene={{ scene }}
             position={offset.toArray().join(' ')}
-            >
+          >
             {SceneOrigin && (
               <a-entity
                 position={SceneOrigin.origin.join(' ')}
@@ -132,11 +157,11 @@ AFRAME.registerSystem('loader', {
                   type: 'origin',
                   singleton: true,
                 }}
-                />
+              />
             )}
             {Misc && (
               <a-entity
-                {...commonProps}
+                {...CommonComponents}
                 z-entity={{
                   type: 'world',
                   singleton: true,
@@ -144,43 +169,43 @@ AFRAME.registerSystem('loader', {
                 z-world={{
                   fileName: Misc.sceneFile,
                 }}
-                />
+              />
             )}
             {Models_v3 && Models_v3.models.map(model => (
               <a-entity
-                {...commonProps}
+                {...CommonComponents}
                 z-model={model}
                 z-entity={{
                   type: 'model_v3',
                 }}
-                />
+              />
             ))}
             {FOModels_v4 && FOModels_v4.models.map(model => (
               <a-entity
-                {...commonProps}
+                {...CommonComponents}
                 z-fo-model={model}
                 z-entity={{
                   type: 'fo_model_v4',
                 }}
-                />
+              />
             ))}
             {Lights && Lights.lights.map(light => (
               <a-entity
-                {...commonProps}
+                {...CommonComponents}
                 z-light={light}
                 z-entity={{
                   type: 'light',
                 }}
-                />
+              />
             ))}
             {Triggers && Triggers.triggers.map(trigger => (
               <a-entity
-                {...commonProps}
+                {...CommonComponents}
                 z-trigger={trigger}
                 z-entity={{
                   type: 'trigger',
                 }}
-                />
+              />
             ))}
           </a-entity>
         );

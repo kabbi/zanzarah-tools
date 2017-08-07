@@ -17,6 +17,6 @@ exports.typeSet = {
     rotation: ['array', 'float32', 4],
     position: ['array', 'float32', 3],
     time: 'float32',
-    parent: 'uint32',
+    parent: 'int32',
   },
 };

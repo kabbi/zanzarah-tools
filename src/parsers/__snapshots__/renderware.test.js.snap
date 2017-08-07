@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`parsers - renderware parses file with wrong RwClump size 1`] = `
 Array [
   Object {

@@ -13,6 +13,7 @@ AFRAME.registerComponent('gui-entity-editor', {
   },
 
   init() {
+    this.guiContext = {};
     this.guiByComponent = {};
     this.unbind = callLater(
       bind(this, 'handleGuiCreated', this.el, 'gui-created'),
@@ -39,6 +40,12 @@ AFRAME.registerComponent('gui-entity-editor', {
       }
       this.addComponent(key);
     }
+    this.guiContext.duplicate = () => this.handleDuplicate();
+    this.gui.add(this.guiContext, 'duplicate')
+      .name('Duplicate');
+    this.guiContext.remove = () => this.handleRemove();
+    this.gui.add(this.guiContext, 'remove')
+      .name('Remove');
   },
   handleComponentUpdate(event) {
     const { name: attrName, newData, oldData } = event.detail;
@@ -63,6 +70,24 @@ AFRAME.registerComponent('gui-entity-editor', {
     setImmediate(() => {
       this.updateComponent(attrName);
     });
+  },
+
+  handleDuplicate() {
+    const { el } = this;
+    const clonedEl = el.cloneNode(true);
+    for (const [ componentName, { data } ] of Object.entries(el.components)) {
+      clonedEl.setAttribute(componentName, data);
+    }
+    el.parentNode.insertBefore(clonedEl, el.nextSibling);
+
+    clonedEl.addEventListener('loaded', () => {
+      const { systems: { selectable } } = el.sceneEl;
+      selectable.select(clonedEl);
+    });
+  },
+  handleRemove() {
+    const { el } = this;
+    el.parentNode.removeChild(el);
   },
 
   getComponent(attrName) {

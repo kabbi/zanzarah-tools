@@ -3,7 +3,9 @@ import { GUI } from 'dat.gui/build/dat.gui';
 
 AFRAME.registerComponent('gui', {
   schema: {
+    name: { type: 'string' },
     lazy: { default: false },
+    target: { type: 'selector' },
   },
 
   init() {
@@ -24,7 +26,13 @@ AFRAME.registerComponent('gui', {
     if (this.root) {
       return;
     }
-    this.root = new GUI();
+    const { target, name } = this.data;
+    if (target) {
+      const { root: parent } = target.components.gui;
+      this.root = parent.addFolder(name);
+    } else {
+      this.root = new GUI();
+    }
     this.el.emit('gui-created', {
       gui: this.root,
     });
@@ -33,10 +41,16 @@ AFRAME.registerComponent('gui', {
     if (!this.root) {
       return;
     }
+    const { target } = this.data;
     this.el.emit('gui-destroyed', {
       gui: this.root,
     });
-    this.root.destroy();
+    if (target) {
+      const { root: parent } = target.components.gui;
+      parent.removeFolder(this.root);
+    } else {
+      this.root.destroy();
+    }
     this.root = null;
   },
 });

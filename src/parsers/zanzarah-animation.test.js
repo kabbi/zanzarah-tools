@@ -15,10 +15,10 @@ describe('parsers - zanzarah animation', () => {
   it('exports typeSet to parse', () => {
     expect(typeSet).toBeDefined();
   });
-  pit('parses smallest known files', async () => {
+  it('parses smallest known files', async () => {
     expect(await parse('./public/fixtures/smallest-animation.ska')).toMatchSnapshot();
   });
-  pit('parses some random file', async () => {
+  it('parses some random file', async () => {
     expect(await parse('./public/fixtures/animation.ska')).toMatchSnapshot();
   });
 });

@@ -21,7 +21,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
   load(url, onLoad, onProgress, onError) {
     verbose('Loading data %s', url);
     this._url = url;
-    const loader = new THREE.XHRLoader(this.manager);
+    const loader = new THREE.FileLoader(this.manager);
     loader.setPath(this.path);
     loader.setResponseType('blob');
     loader.load(url, blob => {
@@ -62,6 +62,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
 
     const { textureCoords } = data;
     const uvLayer = geometry.faceVertexUvs[0] = [];
+    // eslint-disable-next-line no-unused-vars
     for (const [ _, a, b, c ] of indices) {
       const uvs = [a, b, c].map(index => {
         const [ u, v ] = textureCoords[index];

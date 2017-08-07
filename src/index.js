@@ -18,26 +18,31 @@ document.getElementById('root').replaceWith(
       mouse-cursor={{
         objects: '[selectable]',
       }}
-      />
+    />
 
     <a-entity
       gui
       gui-main
-      />
+    />
     <a-entity
       fs
       fs-dragndrop={{ openOnDrop: true }}
       fs-xhr={{ path: getRootPath() }}
-      />
+    />
 
     <a-entity id="target">
-      <a-box
+      {/* <a-box
         selectable
         transformable
-        gui={{ lazy: true }}
-        gui-opener={{ event: 'click' }}
+        gui={{
+          lazy: true,
+          name: 'Selection',
+          target: '[gui-main]',
+        }}
+        gui-opener={{ state: 'selected' }}
         gui-entity-editor={{ exclude: 'gui.*' }}
-        />
+        z-debug
+      /> */}
     </a-entity>
   </a-scene>
 );

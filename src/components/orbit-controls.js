@@ -3,7 +3,7 @@ import AFRAME, { THREE } from 'aframe/src';
 AFRAME.registerComponent('orbit-controls', {
   dependencies: ['camera', 'position'],
   init() {
-    this.el.getObject3D('camera').position.x = 10;
+    this.el.getObject3D('camera').position.z = 10;
     this.el.sceneEl.addEventListener('render-target-loaded', () => {
       this.controls = new THREE.OrbitControls(
         this.el.getObject3D('camera'),

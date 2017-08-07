@@ -30,7 +30,7 @@ AFRAME.registerComponent('z-model', {
   },
   update() {
     const { object3D } = this.el;
-    const { position, rotation, scale } = this.data;
+    const { position, rotation } = this.data;
     object3D.position.fromArray(position);
     object3D.rotation.y = Math.atan2(rotation[0], rotation[2]);
   },

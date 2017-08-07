@@ -29,22 +29,22 @@ describe('parsers - renderware', () => {
   it('exports typeSet to parse', () => {
     expect(typeSet).toBeDefined();
   });
-  pit('parses empty file', async () => {
+  it('parses empty file', async () => {
     expect(await parse('./public/fixtures/empty.dff')).toEqual([]);
   });
-  pit('parses smallest known files', async () => {
+  it('parses smallest known files', async () => {
     for (const file of SmallestKnownFiles) {
       expect(await parse(file)).toMatchSnapshot();
     }
   });
-  pit('parses file with wrong RwClump size', async () => {
+  it('parses file with wrong RwClump size', async () => {
     expect(await parse('./public/fixtures/wrong-root-size.dff')).toMatchSnapshot();
   });
 
   it('serializes empty data', () => {
     expect(serialize([])).toEqual(Buffer.from([]));
   });
-  pit('performs parse-serialize-parse on smallest known files', async () => {
+  it('performs parse-serialize-parse on smallest known files', async () => {
     // We are comparing parsed representation here, not binary blobls, because
     // parsed json is easier to diff by jest, and binary representation may be
     // slightly different, but stil valid

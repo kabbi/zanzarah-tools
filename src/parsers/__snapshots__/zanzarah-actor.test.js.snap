@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parsers - zanzarah actor parses amy definition 1`] = `
+Object {
+  "AnimationFilename_Body": Array [
+    Object {
+      "fileName": "00ast.ska",
+      "id": 34,
+    },
+    Object {
+      "fileName": "00blw.ska",
+      "id": 31,
+    },
+    Object {
+      "fileName": "00cat0.ska",
+      "id": 24,
+    },
+    Object {
+      "fileName": "00cat1.ska",
+      "id": 23,
+    },
+    Object {
+      "fileName": "00cat2.ska",
+      "id": 19,
+    },
+    Object {
+      "fileName": "00fal0.ska",
+      "id": 7,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 5,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 4,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 9,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 10,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 6,
+    },
+    Object {
+      "fileName": "00fwd.ska",
+      "id": 2,
+    },
+    Object {
+      "fileName": "00idl.ska",
+      "id": 0,
+    },
+    Object {
+      "fileName": "00idl1.ska",
+      "id": 11,
+    },
+    Object {
+      "fileName": "00idl2.ska",
+      "id": 12,
+    },
+    Object {
+      "fileName": "00jmp.ska",
+      "id": 1,
+    },
+    Object {
+      "fileName": "00joy.ska",
+      "id": 29,
+    },
+    Object {
+      "fileName": "00she.ska",
+      "id": 32,
+    },
+    Object {
+      "fileName": "00sta0.ska",
+      "id": 30,
+    },
+    Object {
+      "fileName": "00sta1.ska",
+      "id": 38,
+    },
+    Object {
+      "fileName": "00stp.ska",
+      "id": 37,
+    },
+    Object {
+      "fileName": "00sup.ska",
+      "id": 20,
+    },
+    Object {
+      "fileName": "00sup1.ska",
+      "id": 35,
+    },
+    Object {
+      "fileName": "00tal0.ska",
+      "id": 13,
+    },
+    Object {
+      "fileName": "00tal1.ska",
+      "id": 15,
+    },
+    Object {
+      "fileName": "00tel.ska",
+      "id": 6,
+    },
+    Object {
+      "fileName": "00tele.ska",
+      "id": 3,
+    },
+    Object {
+      "fileName": "00wal0.ska",
+      "id": 17,
+    },
+    Object {
+      "fileName": "00wal1.ska",
+      "id": 18,
+    },
+  ],
+  "AnimationPoolID_Body": 0,
+  "AnimationPoolID_Wings": -1,
+  "AttachWingsToBone": 0,
+  "EffectBoneID": 46,
+  "HeadBoneID": 7,
+  "ModelFilename_Body": "chr01.DFF",
+  "ModelFilename_Wings": "",
+}
+`;
+
+exports[`parsers - zanzarah actor parses random fairy definition 1`] = `
+Object {
+  "AnimationFilename_Body": Array [
+    Object {
+      "fileName": "s00bck.ska",
+      "id": 24,
+    },
+    Object {
+      "fileName": "s00dance.ska",
+      "id": 6,
+    },
+    Object {
+      "fileName": "s00fwd.ska",
+      "id": 23,
+    },
+    Object {
+      "fileName": "s00idl00.ska",
+      "id": 20,
+    },
+    Object {
+      "fileName": "s00lft.ska",
+      "id": 25,
+    },
+    Object {
+      "fileName": "s00rgt.ska",
+      "id": 26,
+    },
+    Object {
+      "fileName": "s00sid00.ska",
+      "id": 0,
+    },
+    Object {
+      "fileName": "s00wbk.ska",
+      "id": 5,
+    },
+    Object {
+      "fileName": "s00wfw.ska",
+      "id": 2,
+    },
+    Object {
+      "fileName": "s00wlf.ska",
+      "id": 10,
+    },
+    Object {
+      "fileName": "s00wrt.ska",
+      "id": 9,
+    },
+  ],
+  "AnimationFilename_Wings": Array [
+    Object {
+      "fileName": "f000s00w.ska",
+      "id": 0,
+    },
+  ],
+  "AnimationPoolID_Body": 3,
+  "AnimationPoolID_Wings": 2,
+  "AttachWingsToBone": 6,
+  "EffectBoneID": 31,
+  "HeadBoneID": 7,
+  "ModelFilename_Body": "f000s00m.DFF",
+  "ModelFilename_Wings": "f000s00w.DFF",
+}
+`;

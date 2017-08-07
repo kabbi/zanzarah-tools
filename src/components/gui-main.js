@@ -22,13 +22,13 @@ AFRAME.registerComponent('gui-main', {
     this.guiContext = {};
     this.gui = gui;
 
-    this.fsFolder = this.gui.addFolder('Files');
     this.guiContext.clearScene = () => this.handleClearScene();
     this.gui.add(this.guiContext, 'clearScene')
       .name('Clear workspace');
 
     this.fileControls = [];
     this.guiContext.helpMessage = 'Drop files here';
+    this.fsFolder = this.gui.addFolder('Files');
     this.fsFolder.add(this.guiContext, 'helpMessage')
       .name('Tip');
   },
