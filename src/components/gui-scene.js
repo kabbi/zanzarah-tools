@@ -1,8 +1,8 @@
 import AFRAME from 'aframe/src';
 
-import { typeSet } from '../parsers/zanzarah-scene';
-import { bind } from '../utils/components';
-import { saveFile } from '../utils/files';
+import { typeSet } from 'parsers/zanzarah-scene';
+import { bind } from 'utils/components';
+import { saveFile } from 'utils/files';
 
 AFRAME.registerComponent('gui-scene', {
   dependencies: ['gui', 'z-scene'],

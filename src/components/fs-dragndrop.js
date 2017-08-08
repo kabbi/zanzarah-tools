@@ -3,7 +3,7 @@ import AFRAME from 'aframe/src';
 import debug from 'debug';
 import JSZip from 'jszip';
 
-import { readFile } from '../utils/files';
+import { readFile } from 'utils/files';
 
 const info = debug('app:components:fs-dragndrop:info');
 

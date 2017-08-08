@@ -2,7 +2,7 @@ import AFRAME, { THREE } from 'aframe/src';
 import debug from 'debug';
 import keyBy from 'lodash/keyBy';
 
-import { fetchJson } from '../utils/remote';
+import { fetchJson } from 'utils/remote';
 
 const info = debug('app:components:fs-xhr:info');
 

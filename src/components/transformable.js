@@ -1,6 +1,6 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { bind, callLater } from '../utils/components';
+import { bind, callLater } from 'utils/components';
 
 const Modes = ['translate', 'rotate', 'scale'];
 const DoubleClickInterval = 200;

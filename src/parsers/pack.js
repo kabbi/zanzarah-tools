@@ -8,7 +8,7 @@ const {
   DumpContext,
   DynamicArray,
   BitFlags,
-} = require('../utils/jbinary');
+} = require('utils/jbinary');
 
 exports.typeSet = {
   'jBinary.all': 'SectionList',

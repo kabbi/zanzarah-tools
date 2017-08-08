@@ -1,4 +1,4 @@
-const { DynamicArray } = require('../utils/jbinary');
+const { DynamicArray } = require('utils/jbinary');
 
 exports.typeSet = {
   'jBinary.all': 'Animation',

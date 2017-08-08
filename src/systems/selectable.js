@@ -1,6 +1,6 @@
 import AFRAME from 'aframe/src';
 
-import { bind } from '../utils/components';
+import { bind } from 'utils/components';
 
 AFRAME.registerSystem('selectable', {
   init() {

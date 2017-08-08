@@ -1,7 +1,7 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { bind, callLater } from '../utils/components';
-import { CommonPaths } from '../utils/paths';
+import { bind, callLater } from 'utils/components';
+import { CommonPaths } from 'utils/paths';
 
 import { GuiMethods } from './gui-entity-editor';
 
@@ -44,9 +44,7 @@ AFRAME.registerComponent('z-model', {
   },
   handleLoadModel() {
     const { fileName } = this.data;
-    this.el.setAttribute('dff-model', {
-      dff: `${CommonPaths.StaticModels}/${fileName.toUpperCase()}.DFF`,
-    });
+    this.el.setAttribute('dff-model', `${CommonPaths.StaticModels}/${fileName.toUpperCase()}.DFF`);
   },
   handleComponentChanged(event) {
     const { name, newData } = event.detail;

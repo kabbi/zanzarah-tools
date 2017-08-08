@@ -1,7 +1,7 @@
 import AFRAME from 'aframe/src';
 
-import { bind } from '../utils/components';
-import { CommonPaths } from '../utils/paths';
+import { bind } from 'utils/components';
+import { CommonPaths } from 'utils/paths';
 
 import { GuiMethods } from './gui-entity-editor';
 
@@ -30,8 +30,6 @@ AFRAME.registerComponent('z-world', {
   },
   handleLoadModel() {
     const { fileName } = this.data;
-    this.el.setAttribute('bsp-model', {
-      bsp: `${CommonPaths.Worlds}/${fileName.toUpperCase()}.BSP`,
-    });
+    this.el.setAttribute('bsp-model', `${CommonPaths.Worlds}/${fileName.toUpperCase()}.BSP`);
   },
 });

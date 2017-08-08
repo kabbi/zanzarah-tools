@@ -1,7 +1,7 @@
 import AFRAME, { THREE } from 'aframe/src';
 import flattenDeep from 'lodash/flattenDeep';
 
-import { bind, callLater } from '../utils/components';
+import { bind, callLater } from 'utils/components';
 
 /**
  * Copyright https://github.com/mayognaise/aframe-mouse-cursor-component

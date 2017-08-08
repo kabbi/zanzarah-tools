@@ -6,7 +6,7 @@ const {
   DumpContext,
   DynamicArray,
   DynamicString,
-} = require('../utils/jbinary');
+} = require('utils/jbinary');
 
 const {
   LightTypes,

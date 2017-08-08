@@ -3,7 +3,7 @@ import debug from 'debug';
 import jBinary from 'jbinary';
 import size from 'lodash/size';
 
-import { typeSet } from '../parsers/zanzarah-animation';
+import { typeSet } from 'parsers/zanzarah-animation';
 
 const verbose = debug('app:three:SKALoader:verbose');
 const error = debug('app:three:SKALoader:error');
@@ -70,12 +70,7 @@ THREE.SKALoader = class SKALoader {
         positionValues.push(...position);
         const quaternion = new THREE.Quaternion(...rotation);
         quaternion.inverse();
-        quaternionValues.push(
-          quaternion.x,
-          quaternion.y,
-          quaternion.z,
-          quaternion.w,
-        );
+        quaternion.toArray(quaternionValues, quaternionValues.length);
       }
 
       const path = `.bones[${boneIndex}]`;

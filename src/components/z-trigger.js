@@ -1,7 +1,7 @@
 import AFRAME, { THREE } from 'aframe/src';
 import debug from 'debug';
 
-import { bind } from '../utils/components';
+import { bind } from 'utils/components';
 
 const warn = debug('app:components:z-trigger:warn');
 

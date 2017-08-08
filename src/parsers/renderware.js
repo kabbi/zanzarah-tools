@@ -9,7 +9,7 @@ const {
   DynamicArray,
   DynamicString,
   BitFlags,
-} = require('../utils/jbinary');
+} = require('utils/jbinary');
 
 const {
   SectionTypes,

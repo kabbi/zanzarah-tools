@@ -1,13 +1,11 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { getRootPath } from '../utils/paths';
+import { getRootPath } from 'utils/paths';
 
 AFRAME.registerComponent('bsp-model', {
   dependencies: ['material'],
 
-  schema: {
-    bsp: {type: 'model'},
-  },
+  schema: {type: 'model'},
 
   init() {
     this.model = null;
@@ -16,12 +14,11 @@ AFRAME.registerComponent('bsp-model', {
   },
 
   update() {
-    const { data } = this;
-    if (!data.bsp) {
+    if (!this.data) {
       return;
     }
     this.remove();
-    this.loadObj(data.bsp);
+    this.loadObj(this.data);
   },
 
   remove() {

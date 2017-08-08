@@ -1,6 +1,6 @@
 import AFRAME from 'aframe/src';
 
-import { bind, callLater } from '../utils/components';
+import { bind, callLater } from 'utils/components';
 
 // eslint-disable-next-line import/prefer-default-export
 export const GuiMethods = `Gui-callable method list - ${Math.random()}`;

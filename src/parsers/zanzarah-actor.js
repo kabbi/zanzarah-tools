@@ -4,7 +4,7 @@ const {
   Switch,
   DumpContext,
   DynamicString,
-} = require('../utils/jbinary');
+} = require('utils/jbinary');
 
 const ArraySections = [
   'AnimationFilename_Body',

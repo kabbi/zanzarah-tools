@@ -3,8 +3,8 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { typeSet } from '../parsers/renderware';
-import { section } from '../utils/renderware';
+import { typeSet } from 'parsers/renderware';
+import { section } from 'utils/renderware';
 
 const warn = debug('app:three:DFFExporter:warn');
 

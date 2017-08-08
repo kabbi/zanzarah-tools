@@ -1,13 +1,11 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { getRootPath } from '../utils/paths';
+import { getRootPath } from 'utils/paths';
 
 AFRAME.registerComponent('dff-model', {
   dependencies: ['material'],
 
-  schema: {
-    dff: {type: 'model'},
-  },
+  schema: {type: 'model'},
 
   init() {
     this.model = null;
@@ -16,12 +14,11 @@ AFRAME.registerComponent('dff-model', {
   },
 
   update() {
-    const { data } = this;
-    if (!data.dff) {
+    if (!this.data) {
       return;
     }
     this.remove();
-    this.loadObj(data.dff);
+    this.loadObj(this.data);
   },
 
   remove() {

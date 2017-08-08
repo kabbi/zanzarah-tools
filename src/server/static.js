@@ -3,7 +3,7 @@ const express = require('express');
 const { Glob } = require('glob');
 const cors = require('cors');
 
-const { getRootPath } = require('../utils/paths');
+const { getRootPath } = require('utils/paths');
 
 const app = express();
 

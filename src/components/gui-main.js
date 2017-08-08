@@ -1,7 +1,7 @@
 import AFRAME from 'aframe/src';
 import size from 'lodash/size';
 
-import { bind, callLater } from '../utils/components';
+import { bind, callLater } from 'utils/components';
 
 AFRAME.registerComponent('gui-main', {
   dependencies: ['gui'],

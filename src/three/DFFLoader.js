@@ -3,8 +3,8 @@ import debug from 'debug';
 import jBinary from 'jbinary';
 import keyBy from 'lodash/keyBy';
 
-import { resolveTexturePath } from '../utils/remote';
-import { typeSet } from '../parsers/renderware';
+import { resolveTexturePath } from 'utils/remote';
+import { typeSet } from 'parsers/renderware';
 import './RenderwareLoader';
 
 const verbose = debug('app:three:DFFLoader:verbose');
@@ -197,6 +197,10 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
       }
     }
 
+    for (const material of this._materials) {
+      material.skinning = true;
+    }
+
     this._bones = threeBones;
   }
 
@@ -208,7 +212,6 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     const hasColors = Boolean(this._geometry.getAttribute('color'));
     const material = new THREE.MeshBasicMaterial({
       vertexColors: hasColors ? THREE.VertexColors : THREE.NoColors,
-      skinning: true,
     });
     if (!textureCount) {
       return material;

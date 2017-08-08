@@ -1,6 +1,6 @@
 import AFRAME, { THREE } from 'aframe/src';
 
-import { getRootPath } from '../utils/paths';
+import { getRootPath } from 'utils/paths';
 
 AFRAME.registerComponent('ska-animation', {
   multiple: true,

@@ -5,11 +5,11 @@ import AFRAME, { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { typeSet as actorTypeSet } from '../parsers/zanzarah-actor';
-import { typeSet as sceneTypeSet } from '../parsers/zanzarah-scene';
-import { bind } from '../utils/components';
-import { dom } from '../utils/dom';
-import { getRootPath } from '../utils/paths';
+import { typeSet as actorTypeSet } from 'parsers/zanzarah-actor';
+import { typeSet as sceneTypeSet } from 'parsers/zanzarah-scene';
+import { bind } from 'utils/components';
+import { dom } from 'utils/dom';
+import { getRootPath } from 'utils/paths';
 
 const warn = debug('app:systems:loader:warn');
 
@@ -91,7 +91,7 @@ AFRAME.registerSystem('loader', {
   handleDFF(fileName) {
     this.target.appendChild(
       <a-entity
-        dff-model={{ dff: fileName }}
+        dff-model={fileName}
         transformable
         selectable
       />
@@ -99,7 +99,7 @@ AFRAME.registerSystem('loader', {
   },
   handleBSP(fileName) {
     this.target.appendChild(
-      <a-entity bsp-model={{ bsp: fileName }}/>
+      <a-entity bsp-model={fileName}/>
     );
   },
   handleAED(fileName) {

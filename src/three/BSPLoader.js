@@ -2,8 +2,8 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { resolveTexturePath } from '../utils/remote';
-import { typeSet } from '../parsers/renderware';
+import { resolveTexturePath } from 'utils/remote';
+import { typeSet } from 'parsers/renderware';
 import './RenderwareLoader';
 
 const verbose = debug('app:three:BSPLoader:verbose');

@@ -20,7 +20,7 @@ AFRAME.registerComponent('z-debug', {
       this.updateWireframe(wireframe);
     }
     if (skeleton !== oldData.skeleton) {
-      this.updateWireframe(skeleton);
+      this.updateSkeleton(skeleton);
     }
     if (animation !== oldData.animation) {
       this.el.setAttribute('animation-mixer', 'clip', animation);

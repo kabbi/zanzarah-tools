@@ -1,6 +1,6 @@
 import AFRAME from 'aframe/src';
 
-import { bind, callLater } from '../utils/components';
+import { bind, callLater } from 'utils/components';
 
 AFRAME.registerComponent('gui-opener', {
   dependencies: ['gui'],
