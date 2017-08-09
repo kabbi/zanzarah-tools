@@ -13,6 +13,9 @@ AFRAME.registerComponent('attach-to-bone', {
   },
 
   handleModelLoaded(event) {
+    if (event.target !== this.el.parentNode) {
+      return;
+    }
     const { model } = event.detail;
     this.el.parentNode.object3D.remove(this.el.object3D);
     model.skeleton.bones[this.data].add(this.el.object3D);

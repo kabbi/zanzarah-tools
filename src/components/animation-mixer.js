@@ -42,11 +42,17 @@ AFRAME.registerComponent('animation-mixer', {
     this.activeActions = [];
 
     this.el.addEventListener('model-loaded', event => {
+      if (event.target !== this.el) {
+        return;
+      }
       const { model } = event.detail;
       this.model = model;
       this.load();
     });
     this.el.addEventListener('animation-loaded', event => {
+      if (event.target !== this.el) {
+        return;
+      }
       const { clip } = event.detail;
       this.clips.push(clip);
       this.update({});

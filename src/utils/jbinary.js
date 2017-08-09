@@ -69,18 +69,31 @@ exports.DynamicString = jBinary.Template({
   setParams() {
     this.baseType = {
       length: 'uint32',
-      str: ['string', 'length'],
+      str: [exports.SanitizedString, ['string', 'length']],
     };
   },
   read() {
     const { str } = this.baseRead();
-    return str.replace(/\u0000+$/, '');
+    return str;
   },
   write(str) {
     this.baseWrite({
       length: str.length,
       str,
     });
+  },
+});
+
+exports.SanitizedString = jBinary.Template({
+  setParams(baseType) {
+    this.baseType = baseType;
+  },
+  read() {
+    const str = this.baseRead();
+    return str.replace(/\u0000[\s\S]*$/, '');
+  },
+  write(str) {
+    this.baseWrite(str);
   },
 });
 

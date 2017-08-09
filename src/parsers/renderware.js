@@ -8,6 +8,7 @@ const {
   DumpContext,
   DynamicArray,
   DynamicString,
+  SanitizedString,
   BitFlags,
 } = require('utils/jbinary');
 
@@ -164,7 +165,7 @@ exports.typeSet = {
   },
 
   // Static sections
-  RwString: ['string0', 'size'],
+  RwString: [[SanitizedString, 'string0'], 'size'],
 
   // Model sections
   'RwClump->RwData': {
