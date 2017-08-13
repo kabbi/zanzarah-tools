@@ -1,13 +1,13 @@
 import AFRAME from 'aframe/src';
 
-import { bind } from 'utils/components';
+import { listen } from 'utils/components';
 
 AFRAME.registerSystem('selectable', {
   init() {
     this.scenes = [];
     this.entities = [];
     this.selected = null;
-    bind(this, 'handleClick', this.sceneEl, 'click');
+    listen(this, 'handleClick', this.sceneEl, 'click');
   },
 
   register(entity) {

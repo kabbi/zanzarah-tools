@@ -4,7 +4,7 @@ const MarkerColors = {
   origin: 'blue',
   world: 'orange',
   light: 'white',
-  trigger: 0x6929a5,
+  trigger: 0x6929A5,
   dynamic_model: 'green',
   model_v3: 'red',
   fo_model_v4: 'yellow',

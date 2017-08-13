@@ -16,7 +16,6 @@ AFRAME.registerComponent('fs-dragndrop', {
     const { el: { components: { fs } } } = this;
 
     this.files = [];
-    this.archives = [];
     const component = this;
 
     this.handleDrop = this.handleDrop.bind(this);
@@ -37,47 +36,15 @@ AFRAME.registerComponent('fs-dragndrop', {
             .then(onLoad, onError);
           return;
         }
-        for (const archive of component.archives) {
-          const zip = await archive;
-          const file = zip.file(url);
-          if (file) {
-            file.async(responseType)
-              .then(onLoad, onError);
-            return;
-          }
-        }
         if (onError) {
           onError(new Error(`File not found: ${url}`));
         }
       },
       async index() {
-        const files = [];
-        files.push(...component.files.filter(file => (
-          path.extname(file.name) !== '.zip'
-        )).map(file => (
-          file.name
-        )));
-        for (const archive of component.archives) {
-          const zipFiles = [];
-          const zip = await archive;
-          zip.forEach(relativePath => {
-            zipFiles.push(relativePath);
-          });
-          files.push(...zipFiles);
-        }
-        return files;
+        return component.files.map(file => file.name);
       },
       async includes({ url }) {
-        if (component.files.some(file => file.name === url)) {
-          return true;
-        }
-        for (const archive of component.archives) {
-          const zip = await archive;
-          if (zip.file(url)) {
-            return true;
-          }
-        }
-        return false;
+        return component.files.some(file => file.name === url);
       },
     });
   },
@@ -89,33 +56,40 @@ AFRAME.registerComponent('fs-dragndrop', {
 
   handleDrop(event) {
     event.preventDefault();
-    const { dataTransfer: { files } } = event;
-    info('Updating file list %o', files);
-    // It's originally FileList instance
-    const filesArray = Array.from(files);
-    this.files.push(...filesArray);
-    this.archives.push(...filesArray.filter(file => (
-      path.extname(file.name) === '.zip'
-    )).map(file => (
-      readFile(file, 'arraybuffer').then(data => {
-        const zip = new JSZip();
-        return zip.loadAsync(data);
-      })
-    )));
+    const { components } = this.el;
+    const zipFS = components['fs-zip'];
+    const browserFS = components['fs-browser'];
+    const { dataTransfer } = event;
+    const items = Array.from(dataTransfer.items);
+    info('Updating file list %o', items);
+    const newFiles = [];
+    for (const item of items) {
+      const entry = item.webkitGetAsEntry && item.webkitGetAsEntry();
+      if (browserFS && entry && entry.isDirectory) {
+        browserFS.addRoot(entry);
+        continue;
+      }
+      const file = item.getAsFile();
+      if (zipFS && path.extname(file.name) === '.zip') {
+        zipFS.addArchive(readFile(file, 'arraybuffer')
+          .then(data => new JSZip().loadAsync(data)));
+        continue;
+      }
+      this.files.push(file);
+      newFiles.push(file);
+    }
     this.el.emit('fs-updated', {
       id: 'dnd',
-      newfiles: filesArray,
     });
-    const { openOnDrop } = this.data;
-    if (openOnDrop && filesArray.length === 1) {
-      const fileName = filesArray[0].name;
-      this.el.emit('file-selected', { fileName });
+    if (this.data.openOnDrop && newFiles.length === 1) {
+      this.el.emit('file-selected', {
+        fileName: newFiles[0].name,
+      });
     }
   },
 
   reset() {
     this.files = [];
-    this.archives = [];
     this.el.emit('fs-updated', {
       id: 'dnd',
     });

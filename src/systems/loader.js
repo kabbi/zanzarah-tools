@@ -7,7 +7,7 @@ import jBinary from 'jbinary';
 
 import { typeSet as actorTypeSet } from 'parsers/zanzarah-actor';
 import { typeSet as sceneTypeSet } from 'parsers/zanzarah-scene';
-import { bind } from 'utils/components';
+import { listen } from 'utils/components';
 import { dom } from 'utils/dom';
 import { getRootPath } from 'utils/paths';
 
@@ -35,7 +35,7 @@ AFRAME.registerSystem('loader', {
 
   init() {
     this.target = document.getElementById('target');
-    bind(this, 'handleLoadFile', this.sceneEl, 'file-selected');
+    listen(this, 'handleLoadFile', this.sceneEl, 'file-selected');
   },
 
   clear() {
@@ -46,6 +46,10 @@ AFRAME.registerSystem('loader', {
   },
   handleLoadFile(event) {
     const { detail: { fileName } } = event;
+    this.loadFile(fileName);
+  },
+
+  loadFile(fileName) {
     const ext = path.extname(fileName).slice(1);
     const method = `handle${ext.toUpperCase()}`;
     if (this[method]) {
@@ -91,9 +95,8 @@ AFRAME.registerSystem('loader', {
   handleDFF(fileName) {
     this.target.appendChild(
       <a-entity
+        {...CommonComponents}
         dff-model={fileName}
-        transformable
-        selectable
       />
     );
   },

@@ -1,7 +1,6 @@
 /** @jsx dom */
 
 import { dom } from './utils/dom';
-import { getRootPath } from './utils/paths';
 
 import './index.css';
 import './components';
@@ -22,12 +21,15 @@ document.getElementById('root').replaceWith(
 
     <a-entity
       gui
-      gui-main
+      gui-main={{
+        fsToBrowse: 'dnd',
+      }}
     />
     <a-entity
       fs
+      fs-zip
+      fs-browser
       fs-dragndrop={{ openOnDrop: true }}
-      fs-xhr={{ path: getRootPath() }}
     />
 
     <a-entity id="target">

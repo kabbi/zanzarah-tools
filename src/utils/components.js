@@ -1,13 +1,32 @@
 const BoundSymbol = Symbol('Bound');
 
-export const bind = (component, handler, target, event) => {
+const bindMethod = (component, handler) => {
   if (!component[handler][BoundSymbol]) {
     component[handler] = component[handler].bind(component);
     component[handler][BoundSymbol] = true;
   }
-  target.addEventListener(event, component[handler]);
+  return component[handler];
+};
+
+export const listen = (component, handler, target, event) => {
+  const listener = bindMethod(component, handler);
+  target.addEventListener(event, listener);
   return () => {
-    target.removeEventListener(event, component[handler]);
+    target.removeEventListener(event, listener);
+  };
+};
+
+export const bind = (component, handler, target, event) => {
+  const callback = bindMethod(component, handler);
+  const listener = e => {
+    if (e.target !== target) {
+      return;
+    }
+    callback(e);
+  };
+  target.addEventListener(event, listener);
+  return () => {
+    target.removeEventListener(event, listener);
   };
 };
 

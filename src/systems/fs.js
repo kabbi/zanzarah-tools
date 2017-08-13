@@ -32,4 +32,12 @@ AFRAME.registerSystem('fs', {
     }
     return allFiles;
   },
+  async includes(options) {
+    for (const fs of this.fileSystems) {
+      if (await fs.includes(options)) {
+        return true;
+      }
+    }
+    return false;
+  },
 });

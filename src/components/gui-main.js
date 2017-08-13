@@ -5,6 +5,9 @@ import { bind, callLater } from 'utils/components';
 
 AFRAME.registerComponent('gui-main', {
   dependencies: ['gui'],
+  schema: {
+    fsToBrowse: { type: 'string' },
+  },
   init() {
     this.fsEntity = document.querySelector('[fs]');
     this.unbind = callLater(
@@ -38,6 +41,9 @@ AFRAME.registerComponent('gui-main', {
   },
   async handleFsUpdate(event) {
     const { detail: { id } } = event;
+    if (id !== this.data.fsToBrowse) {
+      return;
+    }
     for (const fileControl of this.fileControls) {
       this.fsFolder.remove(fileControl);
     }

@@ -3,7 +3,6 @@ import debug from 'debug';
 import jBinary from 'jbinary';
 import keyBy from 'lodash/keyBy';
 
-import { resolveTexturePath } from 'utils/remote';
 import { typeSet } from 'parsers/renderware';
 import './RenderwareLoader';
 
@@ -235,7 +234,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     loader.setPath(this.path);
     if (colorFile) {
       verbose('Loading color texture', colorFile);
-      resolveTexturePath(url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
+      this._resolveTexturePath(url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
         material.map = loader.load(texturePath, () => {
           material.needsUpdate = true;
           material.map.sourceFile = url;
@@ -246,7 +245,7 @@ THREE.DFFLoader = class DFFLoader extends THREE.RenderwareLoader {
     }
     if (alphaFile) {
       verbose('Loading alpha texture', alphaFile);
-      resolveTexturePath(url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
+      this._resolveTexturePath(url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
         material.alphaMap = loader.load(texturePath, () => {
           material.needsUpdate = true;
           material.alphaMap.sourceFile = url;

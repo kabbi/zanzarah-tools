@@ -9,7 +9,6 @@ const warn = debug('app:three:FileLoader:warn');
  * registered file systems instead
  */
 
-window.t = THREE;
 const { FileLoader } = THREE;
 FileLoader.prototype._originalLoad = FileLoader.prototype.load;
 FileLoader.prototype.load = function (url, onLoad, onProgress, onError) {

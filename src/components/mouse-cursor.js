@@ -1,7 +1,7 @@
 import AFRAME, { THREE } from 'aframe/src';
 import flattenDeep from 'lodash/flattenDeep';
 
-import { bind, callLater } from 'utils/components';
+import { listen, callLater } from 'utils/components';
 
 /**
  * Copyright https://github.com/mayognaise/aframe-mouse-cursor-component
@@ -45,7 +45,7 @@ AFRAME.registerComponent('mouse-cursor', {
     const { canvas } = sceneEl;
 
     if (!canvas) {
-      this.detachEventListeners = bind(
+      this.detachEventListeners = listen(
         this, 'attachEventListeners',
         sceneEl, 'render-target-loaded'
       );
@@ -57,16 +57,16 @@ AFRAME.registerComponent('mouse-cursor', {
     }
 
     this.detachEventListeners = callLater(
-      bind(this, 'handleEnterVR', sceneEl, 'enter-vr'),
-      bind(this, 'handleExitVR', sceneEl, 'exit-vr'),
-      bind(this, 'handleMouseDown', canvas, 'mousedown'),
-      bind(this, 'handleMouseMove', canvas, 'mousemove'),
-      bind(this, 'handleRelease', canvas, 'mouseup'),
-      bind(this, 'handleRelease', canvas, 'mouseout'),
-      bind(this, 'handleMouseDown', canvas, 'touchstart'),
-      bind(this, 'handleTouchMove', canvas, 'touchmove'),
-      bind(this, 'handleRelease', canvas, 'touchend'),
-      bind(this, 'handleComponentChanged', el, 'componentchanged'),
+      listen(this, 'handleEnterVR', sceneEl, 'enter-vr'),
+      listen(this, 'handleExitVR', sceneEl, 'exit-vr'),
+      listen(this, 'handleMouseDown', canvas, 'mousedown'),
+      listen(this, 'handleMouseMove', canvas, 'mousemove'),
+      listen(this, 'handleRelease', canvas, 'mouseup'),
+      listen(this, 'handleRelease', canvas, 'mouseout'),
+      listen(this, 'handleMouseDown', canvas, 'touchstart'),
+      listen(this, 'handleTouchMove', canvas, 'touchmove'),
+      listen(this, 'handleRelease', canvas, 'touchend'),
+      listen(this, 'handleComponentChanged', el, 'componentchanged'),
     );
   },
 

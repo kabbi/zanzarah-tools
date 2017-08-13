@@ -2,7 +2,6 @@ import { THREE } from 'aframe/src';
 import debug from 'debug';
 import jBinary from 'jbinary';
 
-import { resolveTexturePath } from 'utils/remote';
 import { typeSet } from 'parsers/renderware';
 import './RenderwareLoader';
 
@@ -99,7 +98,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
     const loader = new THREE.TextureLoader();
     loader.setPath(this.path);
     if (colorFile) {
-      resolveTexturePath(this._url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
+      this._resolveTexturePath(this._url, `${colorFile.toUpperCase()}.BMP`).then(texturePath => {
         verbose('Loading color texture', colorFile, texturePath);
         material.map = loader.load(texturePath, () => {
           material.needsUpdate = true;
@@ -109,7 +108,7 @@ THREE.BSPLoader = class BSPLoader extends THREE.RenderwareLoader {
       });
     }
     if (alphaFile) {
-      resolveTexturePath(this._url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
+      this._resolveTexturePath(this._url, `${alphaFile.toUpperCase()}.BMP`).then(texturePath => {
         verbose('Resolved texture path', alphaFile, texturePath);
         material.alphaMap = loader.load(texturePath, () => {
           material.needsUpdate = true;

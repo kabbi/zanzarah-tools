@@ -165,7 +165,7 @@ exports.typeSet = {
   },
 
   // Static sections
-  RwString: [[SanitizedString, 'string0'], 'size'],
+  RwString: [SanitizedString, ['string0', 'size']],
 
   // Model sections
   'RwClump->RwData': {

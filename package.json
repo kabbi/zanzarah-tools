@@ -24,6 +24,7 @@
     "node-uuid": "^1.4.3",
     "pngjs": "^3.2.0",
     "rufus": "^0.5.7",
+    "three": "^0.84.0",
     "yargs": "^8.0.2"
   },
   "devDependencies": {
@@ -42,7 +43,7 @@
     "xo": "^0.18.2"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node src/server/static.js\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
@@ -88,7 +89,9 @@
       "object-curly-spacing": "off",
       "camelcase": "off",
       "new-cap": "off",
-      "no-mixed-operators": "off"
+      "no-await-in-loop": "off",
+      "no-mixed-operators": "off",
+      "no-constant-condition": "off"
     },
     "overrides": [
       {

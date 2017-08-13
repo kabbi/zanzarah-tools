@@ -1,7 +1,4 @@
-const path = require('path');
-const keyBy = require('lodash/keyBy');
-
-const { CommonPaths, getRootPath } = require('./paths');
+const { getRootPath } = require('./paths');
 
 let indexCache = null;
 
@@ -22,40 +19,4 @@ exports.fetchIndex = () => {
     indexCache = exports.fetchJson(`${getRootPath()}`);
   }
   return indexCache;
-};
-
-exports.filterFiles = (files, category, ext) => {
-  const prefix = CommonPaths[category];
-  return files.filter(file => (
-    file.startsWith(prefix) && file.endsWith(ext)
-  ));
-};
-
-exports.resolveTexturePath = (modelPath, fileName) => {
-  let modelDirName = path.basename(
-    path.dirname(modelPath)
-  );
-  if (modelDirName === '.') {
-    // When there is no dir detected, provide some fake one
-    modelDirName = 'MODELS';
-  }
-
-  return exports.fetchIndex().then(files => {
-    const existsIndex = keyBy(files);
-    const filesToTry = [
-      [CommonPaths.Textures, modelDirName, fileName],
-      [CommonPaths.WorldTextures, fileName],
-      [CommonPaths.ActorTextures, fileName],
-      [CommonPaths.BackdropTextures, fileName],
-      [CommonPaths.MiscTextures, fileName],
-    ].map(parts => (
-      path.join(...parts)
-    ));
-    for (const file of filesToTry) {
-      if (existsIndex[file]) {
-        return file;
-      }
-    }
-    throw new Error(`Texture not found ${fileName} of ${modelPath}`);
-  });
 };
